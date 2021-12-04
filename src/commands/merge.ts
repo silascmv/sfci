@@ -85,26 +85,50 @@ export default class Merge extends Command {
   }
   mergeProfile(fileName: string, target: any, source: any) {
     var sourceFile = this.convertFile(source);
+    //FIELD PERMISSION MAPS
     var mapOfFieldObjTarget = this.createMapFieldPermission(target);
     var mapOfFieldObjSource = this.createMapFieldPermission(source);
+    // USER PERMISSION MAPS
+    var mapUserPermissionTarget = this.createMapUserPermission(target);
+    var mapUserPermissionSource = this.createMapUserPermission(source);
 
     var arrayFieldPermission = new Array();
-    for (let field of mapOfFieldObjSource.keys()) {
-      if (mapOfFieldObjTarget.has(field) == true) {
-        var sourceField = mapOfFieldObjSource.get(field);
-        var targetField = mapOfFieldObjTarget.get(field);
-        targetField.editable = sourceField.editable;
-        targetField.readable = sourceField.readable;
-/*         console.log('==> targetfield',targetField);
- */        arrayFieldPermission.push(targetField);
-      } else {
-        var newFieldPermission  = mapOfFieldObjSource.get(field.toString());
-        arrayFieldPermission.push(newFieldPermission);
+    var arrayUserPermission = new Array();
 
+    // START - CHANGE FIELD PERMISSIONS
+    for (let field of mapOfFieldObjSource.keys()) {
+
+      if (mapOfFieldObjTarget.has(field) == true) {
+        var targetField = mapOfFieldObjTarget.get(field);
+        targetField.editable = mapOfFieldObjSource.get(field).editable;
+        targetField.readable = mapOfFieldObjTarget.get(field).readable;
+        arrayFieldPermission.push(targetField);
+      } else {
+        var newFieldPermission = mapOfFieldObjSource.get(field.toString());
+        arrayFieldPermission.push(newFieldPermission);
+      }
+
+    }
+    sourceFile.Profile.fieldPermissions = arrayFieldPermission;
+    // END - CHANGE FIELD PERMISSIONS
+    // START - CHANGE USER PERMISSIONS
+    for (let field of mapUserPermissionSource.keys()) {
+
+      if (mapUserPermissionTarget.has(field) == true) {
+        var targetUsrPerm = mapUserPermissionTarget.get(field);
+        targetUsrPerm.enabled = mapUserPermissionSource.get(field).enabled;
+        arrayUserPermission.push(targetUsrPerm);
+      } else {
+        var newUsrPermission = mapUserPermissionSource.get(field.toString());
+        arrayUserPermission.push(newUsrPermission);
       }
     }
-    // PUT CHANGES IN FILE
-    sourceFile.Profile.fieldPermissions = arrayFieldPermission; 
+    sourceFile.Profile.userPermissions = arrayUserPermission;
+    // END - CHANGE USER PERMISSIONS
+
+
+
+    //WRITE CHANGES
     var builder = new xml2js.Builder({ renderOpts: { pretty: true, 'indent': '    ', 'newline': '\n' } });
     var xml = builder.buildObject(sourceFile);
 
@@ -134,6 +158,23 @@ export default class Merge extends Command {
         for (let x of json.Profile.fieldPermissions) {
           /*   console.log(x);*/
           mapOfFieldPerm.set(x.field.toString(), x);
+        }
+      }
+    });
+
+    return mapOfFieldPerm;
+
+  }
+  createMapUserPermission(file: any) {
+    var mapOfFieldPerm = new Map();
+    xml2js.parseString(file, (err: Error, result: any) => {
+      if (err) {
+        console.log(err);
+      } else {
+        var json = result;
+        for (let x of json.Profile.userPermissions) {
+          /*   console.log(x);*/
+          mapOfFieldPerm.set(x.name.toString(), x);
         }
       }
     });
