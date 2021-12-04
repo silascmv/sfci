@@ -1,10 +1,5 @@
 import { Command, flags } from '@oclif/command'
-import { resolve } from 'dns';
-import * as fs from 'fs';
-import * as path from 'path';
-import { cwd } from 'process';
-import * as xml2js from 'xml2js';
-
+import * as mergeUtils from '../utils/mergeUtils'
 export default class Merge extends Command {
   static description = 'Merge your metadata from source path to target org path'
 
@@ -32,9 +27,8 @@ export default class Merge extends Command {
     switch (flags.type) {
 
       case 'profile':
-
-        const filesInSource = this.getFilesInFolders(flags.source)
-        const filesInTarget = this.getFilesInFolders(flags.dir)
+        const filesInSource = mergeUtils.getFilesInFolders(flags.source)
+        const filesInTarget = mergeUtils.getFilesInFolders(flags.dir)
 
         let mapToUpdate = new Map();
         let mapNewProfiles = new Map();
@@ -50,7 +44,7 @@ export default class Merge extends Command {
         // MOVE ONLY NEWPROFILES
         if (mapNewProfiles.size > 0) {
           for (let key of mapNewProfiles.keys()) {
-            this.moveFilesToTarget(key, flags.source, flags.dir);
+            mergeUtils.moveFilesToTarget(key, flags.source, flags.dir);
           }
         }
 
@@ -70,34 +64,21 @@ export default class Merge extends Command {
 
   }
 
-  getFilesInFolders(folder: string) {
-    let allFilesInDir = new Map(fs.readdirSync(folder, 'utf8').entries());
-    let mapRetorno = new Map();
 
-    for (let entry of allFilesInDir.values()) {
-      mapRetorno.set(entry, fs.readFileSync(folder + '/' + entry, { encoding: 'utf8', flag: 'r' }));
-    }
-    return mapRetorno;
-  }
-
-  moveFilesToTarget(fileName: string, source: string, target: string) {
-    fs.copyFileSync(process.cwd() + '/' + source + '/' + fileName, process.cwd() + '/' + target + '/' + fileName);
-  }
   mergeProfile(fileName: string, target: any, source: any) {
-    var sourceFile = this.convertFile(source);
+    var sourceFile = mergeUtils.convertFile(source);
     //FIELD PERMISSION MAPS
-    var mapOfFieldObjTarget = this.createMapFieldPermission(target);
-    var mapOfFieldObjSource = this.createMapFieldPermission(source);
+    var mapOfFieldObjTarget = mergeUtils.mountMapFieldPermission(target);
+    var mapOfFieldObjSource = mergeUtils.mountMapFieldPermission(source);
     // USER PERMISSION MAPS
-    var mapUserPermissionTarget = this.createMapUserPermission(target);
-    var mapUserPermissionSource = this.createMapUserPermission(source);
+    var mapUserPermissionTarget = mergeUtils.mountMapUserPermission(target);
+    var mapUserPermissionSource = mergeUtils.mountMapUserPermission(source);
 
-    var arrayFieldPermission = new Array();
+    sourceFile.Profile.fieldPermissions = mergeUtils.mergeFieldPermissions(mapOfFieldObjTarget,mapOfFieldObjSource);
     var arrayUserPermission = new Array();
 
-    // START - CHANGE FIELD PERMISSIONS
+    /* // START - CHANGE FIELD PERMISSIONS
     for (let field of mapOfFieldObjSource.keys()) {
-
       if (mapOfFieldObjTarget.has(field) == true) {
         var targetField = mapOfFieldObjTarget.get(field);
         targetField.editable = mapOfFieldObjSource.get(field).editable;
@@ -107,12 +88,12 @@ export default class Merge extends Command {
         var newFieldPermission = mapOfFieldObjSource.get(field.toString());
         arrayFieldPermission.push(newFieldPermission);
       }
-
     }
-    sourceFile.Profile.fieldPermissions = arrayFieldPermission;
+
     // END - CHANGE FIELD PERMISSIONS
+ */
     // START - CHANGE USER PERMISSIONS
-    for (let field of mapUserPermissionSource.keys()) {
+   /*  for (let field of mapUserPermissionSource.keys()) {
 
       if (mapUserPermissionTarget.has(field) == true) {
         var targetUsrPerm = mapUserPermissionTarget.get(field);
@@ -123,65 +104,10 @@ export default class Merge extends Command {
         arrayUserPermission.push(newUsrPermission);
       }
     }
-    sourceFile.Profile.userPermissions = arrayUserPermission;
+    sourceFile.Profile.userPermissions = arrayUserPermission; */
     // END - CHANGE USER PERMISSIONS
 
-
-
-    //WRITE CHANGES
-    var builder = new xml2js.Builder({ renderOpts: { pretty: true, 'indent': '    ', 'newline': '\n' } });
-    var xml = builder.buildObject(sourceFile);
-
-    fs.writeFileSync(this.targetFolder + '/' + fileName, xml);
-
+    mergeUtils.writeChanges(sourceFile,this.targetFolder,fileName);
   }
-
-  convertFile(file: any) {
-    var resultado;
-    xml2js.parseString(file, (err: Error, result: any) => {
-      if (err) {
-        console.log(err);
-      } else {
-        resultado = result;
-      }
-    });
-    return resultado;
-  }
-
-  createMapFieldPermission(file: any) {
-    var mapOfFieldPerm = new Map();
-    xml2js.parseString(file, (err: Error, result: any) => {
-      if (err) {
-        console.log(err);
-      } else {
-        var json = result;
-        for (let x of json.Profile.fieldPermissions) {
-          /*   console.log(x);*/
-          mapOfFieldPerm.set(x.field.toString(), x);
-        }
-      }
-    });
-
-    return mapOfFieldPerm;
-
-  }
-  createMapUserPermission(file: any) {
-    var mapOfFieldPerm = new Map();
-    xml2js.parseString(file, (err: Error, result: any) => {
-      if (err) {
-        console.log(err);
-      } else {
-        var json = result;
-        for (let x of json.Profile.userPermissions) {
-          /*   console.log(x);*/
-          mapOfFieldPerm.set(x.name.toString(), x);
-        }
-      }
-    });
-
-    return mapOfFieldPerm;
-
-  }
-
 
 }
