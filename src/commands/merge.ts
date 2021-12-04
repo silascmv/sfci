@@ -8,6 +8,8 @@ import * as xml2js from 'xml2js';
 export default class Merge extends Command {
   static description = 'Merge your metadata from source path to target org path'
 
+  targetFolder = '';
+
   static examples = [
     `$ sfci merge -t profile -s metadata -d src`,
   ]
@@ -25,14 +27,18 @@ export default class Merge extends Command {
 
   async run() {
     const { args, flags } = this.parse(Merge);
+    this.targetFolder = flags.dir;
 
     switch (flags.type) {
 
       case 'profile':
+
         const filesInSource = this.getFilesInFolders(flags.source)
         const filesInTarget = this.getFilesInFolders(flags.dir)
+
         let mapToUpdate = new Map();
         let mapNewProfiles = new Map();
+
         for (let key of filesInSource.keys()) {
           if (filesInTarget.has(key)) {
             mapToUpdate.set(key, filesInTarget.get(key));
@@ -41,12 +47,14 @@ export default class Merge extends Command {
           }
         }
 
+        // MOVE ONLY NEWPROFILES
         if (mapNewProfiles.size > 0) {
           for (let key of mapNewProfiles.keys()) {
             this.moveFilesToTarget(key, flags.source, flags.dir);
           }
         }
 
+        // MERGE PERMISSIONS IN SAME FILES
         if (mapToUpdate.size > 0) {
           for (let key of mapToUpdate.keys()) {
             this.mergeProfile(key, mapToUpdate.get(key), filesInSource.get(key));
@@ -63,27 +71,20 @@ export default class Merge extends Command {
   }
 
   getFilesInFolders(folder: string) {
-    let fullPath = process.cwd() + '/' + folder;
-    let allFilesInDir = new Map(fs.readdirSync(fullPath, 'utf8').entries());
+    let allFilesInDir = new Map(fs.readdirSync(folder, 'utf8').entries());
     let mapRetorno = new Map();
 
     for (let entry of allFilesInDir.values()) {
-      mapRetorno.set(entry, fs.readFileSync(process.cwd() + '/' + folder + '/' + entry, { encoding: 'utf8', flag: 'r' }));
+      mapRetorno.set(entry, fs.readFileSync(folder + '/' + entry, { encoding: 'utf8', flag: 'r' }));
     }
     return mapRetorno;
   }
 
-
   moveFilesToTarget(fileName: string, source: string, target: string) {
     fs.copyFileSync(process.cwd() + '/' + source + '/' + fileName, process.cwd() + '/' + target + '/' + fileName);
   }
-
-
-
-
   mergeProfile(fileName: string, target: any, source: any) {
     var sourceFile = this.convertFile(source);
-   /*  var targetFile = this.convertFile(target); */
     var mapOfFieldObjTarget = this.createMapFieldPermission(target);
     var mapOfFieldObjSource = this.createMapFieldPermission(source);
 
@@ -95,15 +96,23 @@ export default class Merge extends Command {
         targetField.editable = sourceField.editable;
         targetField.readable = sourceField.readable;
         arrayFieldPermission.push(targetField);
-      }else{
+      } else {
         console.log('field');
+        console.log(field);
+        var sourceField  = mapOfFieldObjSource.get(field);
+        sourceField.editable = mapOfFieldObjSource.get(field).editable;
+        sourceField.readable = mapOfFieldObjSource.get(field).editable;
+        sourceField.field = mapOfFieldObjSource.get(field).field;
+        arrayFieldPermission.push(targetField);
+
       }
     }
-
-    sourceFile.Profile.fieldPermissions = arrayFieldPermission;
-    var builder = new xml2js.Builder();
+    // PUT CHANGES IN FILE
+    sourceFile.Profile.fieldPermissions = arrayFieldPermission; 
+    var builder = new xml2js.Builder({ renderOpts: { pretty: true, 'indent': '    ', 'newline': '\n' } });
     var xml = builder.buildObject(sourceFile);
-    fs.writeFileSync(fileName, xml);
+
+    fs.writeFileSync(this.targetFolder + '/' + fileName, xml);
 
   }
 
