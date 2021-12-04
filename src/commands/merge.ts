@@ -95,15 +95,11 @@ export default class Merge extends Command {
         var targetField = mapOfFieldObjTarget.get(field);
         targetField.editable = sourceField.editable;
         targetField.readable = sourceField.readable;
-        arrayFieldPermission.push(targetField);
+/*         console.log('==> targetfield',targetField);
+ */        arrayFieldPermission.push(targetField);
       } else {
-        console.log('field');
-        console.log(field);
-        var sourceField  = mapOfFieldObjSource.get(field);
-        sourceField.editable = mapOfFieldObjSource.get(field).editable;
-        sourceField.readable = mapOfFieldObjSource.get(field).editable;
-        sourceField.field = mapOfFieldObjSource.get(field).field;
-        arrayFieldPermission.push(targetField);
+        var newFieldPermission  = mapOfFieldObjSource.get(field.toString());
+        arrayFieldPermission.push(newFieldPermission);
 
       }
     }
