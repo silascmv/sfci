@@ -3,12 +3,12 @@
     <custom>false</custom>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Opportunity.TrackingNumber__c</field>
+        <field>Opportunity.Abcde__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Opportunity.Abcde__c</field>
+        <field>Opportunity.Teste__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
