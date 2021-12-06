@@ -73,41 +73,16 @@ export default class Merge extends Command {
     // USER PERMISSION MAPS
     var mapUserPermissionTarget = mergeUtils.mountMapUserPermission(target);
     var mapUserPermissionSource = mergeUtils.mountMapUserPermission(source);
+    // LAYOUT ASSINGMENTS PERMISSION MAPS
+    var mapLayoutAssignmentsTarget = mergeUtils.mountMapLayoutAssignments(target);
+    var mapLayoutAssignmentsSource = mergeUtils.mountMapLayoutAssignments(source);
 
     sourceFile.Profile.fieldPermissions = mergeUtils.mergeFieldPermissions(mapOfFieldObjTarget,mapOfFieldObjSource);
-    var arrayUserPermission = new Array();
-
-    /* // START - CHANGE FIELD PERMISSIONS
-    for (let field of mapOfFieldObjSource.keys()) {
-      if (mapOfFieldObjTarget.has(field) == true) {
-        var targetField = mapOfFieldObjTarget.get(field);
-        targetField.editable = mapOfFieldObjSource.get(field).editable;
-        targetField.readable = mapOfFieldObjTarget.get(field).readable;
-        arrayFieldPermission.push(targetField);
-      } else {
-        var newFieldPermission = mapOfFieldObjSource.get(field.toString());
-        arrayFieldPermission.push(newFieldPermission);
-      }
-    }
-
-    // END - CHANGE FIELD PERMISSIONS
- */
-    // START - CHANGE USER PERMISSIONS
-   /*  for (let field of mapUserPermissionSource.keys()) {
-
-      if (mapUserPermissionTarget.has(field) == true) {
-        var targetUsrPerm = mapUserPermissionTarget.get(field);
-        targetUsrPerm.enabled = mapUserPermissionSource.get(field).enabled;
-        arrayUserPermission.push(targetUsrPerm);
-      } else {
-        var newUsrPermission = mapUserPermissionSource.get(field.toString());
-        arrayUserPermission.push(newUsrPermission);
-      }
-    }
-    sourceFile.Profile.userPermissions = arrayUserPermission; */
-    // END - CHANGE USER PERMISSIONS
+    sourceFile.Profile.userPermissions = mergeUtils.mergeUserPermissions(mapUserPermissionTarget,mapUserPermissionSource); 
+    sourceFile.Profile.layoutAssignments = mergeUtils.mergeUserPermissions(mapLayoutAssignmentsTarget,mapLayoutAssignmentsSource); 
 
     mergeUtils.writeChanges(sourceFile,this.targetFolder,fileName);
+
   }
 
 }
