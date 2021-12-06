@@ -93,7 +93,7 @@ export function mergeLayoutAssignments(mapLayoutAssignmentsTarget: Map<any,any>,
   for (let field of mapLayoutAssignmentsSource.keys()) {
     if (mapLayoutAssignmentsTarget.has(field) == true) {
       var targetLayoutPerm = mapLayoutAssignmentsTarget.get(field);
-      targetLayoutPerm.recordType = mapLayoutAssignmentsSource.get(field).recordType != mapLayoutAssignmentsTarget.get(field).recordType ? 
+      targetLayoutPerm.recordType = mapLayoutAssignmentsSource.get(field).recordType.toString() != mapLayoutAssignmentsTarget.get(field).recordType.toString() ? 
                                     mapLayoutAssignmentsSource.get(field).recordType :  mapLayoutAssignmentsTarget.get(field).recordType ;
       arrayLayoutAssigments.push(targetLayoutPerm);
     } else {
