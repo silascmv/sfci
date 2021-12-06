@@ -31,6 +31,13 @@
         <field>Teste__c.DB_Region__c</field>
         <readable>false</readable>
     </fieldPermissions>
+    <layoutAssignments>
+        <layout>Asset-Teste</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Asset-Term</layout>
+        <recordType>Asset.TERMTERM</recordType>
+    </layoutAssignments>
     <userLicense>Salesforce</userLicense>
     <userPermissions>
         <enabled>true</enabled>
