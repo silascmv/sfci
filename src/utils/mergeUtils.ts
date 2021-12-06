@@ -41,8 +41,8 @@ export function mountMapLayoutAssignments(file: any){
         console.log(err);
       } else {
         var json = result;
-        console.log(json.Profile.layoutAssignments)
-        if(isIterable(json.Profile.layoutAssignments)){
+/*         console.log('mountMapLayoutAssignments',json.Profile.layoutAssignments);
+ */        if(json.Profile.layoutAssignments != null){
           for (let x of json.Profile.layoutAssignments) {
             mapOfFieldPerm.set(x.layout.toString(), x);
           }
@@ -90,10 +90,11 @@ export function mergeUserPermissions(mapUserPermissionTarget: Map<any,any>,mapUs
 // SPECIFIC INFORMATIONS ( CASE THE TARGET FILE HAS THE PERMISSION, ONLY VERIFIY IF CHANGE RECORDTYPE)
 export function mergeLayoutAssignments(mapLayoutAssignmentsTarget: Map<any,any>,mapLayoutAssignmentsSource: Map<any,any>){
   var arrayLayoutAssigments = new Array();
+  console.log( mapLayoutAssignmentsSource.keys());
   for (let field of mapLayoutAssignmentsSource.keys()) {
     if (mapLayoutAssignmentsTarget.has(field) == true) {
       var targetLayoutPerm = mapLayoutAssignmentsTarget.get(field);
-      targetLayoutPerm.recordType = mapLayoutAssignmentsSource.get(field).recordType.toString() != mapLayoutAssignmentsTarget.get(field).recordType.toString() ? 
+      targetLayoutPerm.recordType = mapLayoutAssignmentsSource.get(field).recordType != mapLayoutAssignmentsTarget.get(field).recordType? 
                                     mapLayoutAssignmentsSource.get(field).recordType :  mapLayoutAssignmentsTarget.get(field).recordType ;
       arrayLayoutAssigments.push(targetLayoutPerm);
     } else {

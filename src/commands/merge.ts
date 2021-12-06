@@ -79,7 +79,7 @@ export default class Merge extends Command {
 
     sourceFile.Profile.fieldPermissions = mergeUtils.mergeFieldPermissions(mapOfFieldObjTarget,mapOfFieldObjSource);
     sourceFile.Profile.userPermissions = mergeUtils.mergeUserPermissions(mapUserPermissionTarget,mapUserPermissionSource); 
-    sourceFile.Profile.layoutAssignments = mergeUtils.mergeUserPermissions(mapLayoutAssignmentsTarget,mapLayoutAssignmentsSource); 
+    sourceFile.Profile.layoutAssignments = mergeUtils.mergeLayoutAssignments(mapLayoutAssignmentsTarget,mapLayoutAssignmentsSource); 
 
     mergeUtils.writeChanges(sourceFile,this.targetFolder,fileName);
 
