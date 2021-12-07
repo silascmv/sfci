@@ -76,14 +76,37 @@ export default class Merge extends Command {
     // LAYOUT ASSINGMENTS PERMISSION MAPS
     var mapLayoutAssignmentsTarget = mergeUtils.mountMapLayoutAssignments(target);
     var mapLayoutAssignmentsSource = mergeUtils.mountMapLayoutAssignments(source);
-    //  customMetadataTypeAccesses PERMISSION MAPS
+    //  CustomMetadataTypeAccesses MAPS
     var mapCustomMdtAccessesTarget = mergeUtils.mountCustomMetadataTypeAccesses(target);
     var mapCustomMdtAccessesSource = mergeUtils.mountCustomMetadataTypeAccesses(source);
-
+    //  CustomPermissions MAPS
+    var mapCustomPermissionsTarget = mergeUtils.mountCustomPermissions(target);
+    var mapCustomPermissionsSource = mergeUtils.mountCustomPermissions(source);
+    //  Class Accesses MAPS
+    var mapClassAccessesTarget = mergeUtils.mountClassAccesses(target);
+    var mapClassAccessesSource = mergeUtils.mountClassAccesses(source);
+    //  CustomSettingAccesses MAPS
+    var mapCustomSettingsTarget = mergeUtils.mountCustomSettingAccesses(target);
+    var mapCCustomSettingsSource = mergeUtils.mountCustomSettingAccesses(source);
+    //  Application Visibilities MAPS
+    var mapApplicationVisibilitiesTarget = mergeUtils.mountApplicationVisibilities(target);
+    var mapApplicationVisibilitiesSource = mergeUtils.mountApplicationVisibilities(source);
+  
+    //  Object Permission MAPS
+    var mapObjectPermissionsTarget = mergeUtils.mountObjectPermissions(target);
+    var mapObjectPermissionsSource = mergeUtils.mountObjectPermissions(source);
+  
+  
+   
     sourceFile.Profile.fieldPermissions = mergeUtils.mergeFieldPermissions(mapOfFieldObjTarget,mapOfFieldObjSource);
     sourceFile.Profile.userPermissions = mergeUtils.mergeUserPermissions(mapUserPermissionTarget,mapUserPermissionSource); 
     sourceFile.Profile.layoutAssignments = mergeUtils.mergeLayoutAssignments(mapLayoutAssignmentsTarget,mapLayoutAssignmentsSource); 
     sourceFile.Profile.customMetadataTypeAccesses = mergeUtils.mergeCustomMdtAccesses(mapCustomMdtAccessesTarget,mapCustomMdtAccessesSource); 
+    sourceFile.Profile.customPermissions = mergeUtils.mergeCustomPermissions(mapCustomPermissionsTarget,mapCustomPermissionsSource); 
+    sourceFile.Profile.classAccesses = mergeUtils.mergeClassAccesses(mapClassAccessesTarget,mapClassAccessesSource); 
+    sourceFile.Profile.customSettingAccesses = mergeUtils.mergeClassAccesses(mapCustomSettingsTarget,mapCCustomSettingsSource); 
+    sourceFile.Profile.applicationVisibilities = mergeUtils.mergeApplicationVisibilities(mapApplicationVisibilitiesTarget,mapApplicationVisibilitiesSource); 
+    sourceFile.Profile.objectPermissions = mergeUtils.mergeObjectPermissions(mapObjectPermissionsTarget,mapObjectPermissionsSource); 
 
     mergeUtils.writeChanges(sourceFile,this.targetFolder,fileName);
 

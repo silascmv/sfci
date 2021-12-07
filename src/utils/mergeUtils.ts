@@ -68,6 +68,92 @@ export function mountCustomMetadataTypeAccesses(file: any) {
   return mapOfCustomMdtAccess;
 }
 
+export function mountCustomPermissions(file: any) {
+  var mapOfCustomPermission = new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      if (json.Profile.customPermissions != null) {
+        for (let obj of json.Profile.customPermissions) {
+          mapOfCustomPermission.set(obj.name.toString(), obj);
+        }
+      }
+    }
+  });
+  return mapOfCustomPermission;
+}
+
+export function mountClassAccesses(file: any) {
+  var mapOfClassAccesses = new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      if (json.Profile.classAccesses != null) {
+        for (let obj of json.Profile.classAccesses) {
+          mapOfClassAccesses.set(obj.apexClass.toString(), obj);
+        }
+      }
+    }
+  });
+  return mapOfClassAccesses;
+}
+
+export function mountCustomSettingAccesses(file: any) {
+  var mapOfCustomSettings= new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      if (json.Profile.customSettingAccesses != null) {
+        for (let obj of json.Profile.customSettingAccesses) {
+          mapOfCustomSettings.set(obj.name.toString(), obj);
+        }
+      }
+    }
+  });
+  return mapOfCustomSettings;
+
+
+}
+export function mountApplicationVisibilities(file: any) {
+  var mapOfApplicationVisibilities= new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      if (json.Profile.applicationVisibilities != null) {
+        for (let obj of json.Profile.applicationVisibilities) {
+          mapOfApplicationVisibilities.set(obj.application.toString(), obj);
+        }
+      }
+    }
+  });
+  return mapOfApplicationVisibilities;
+}
+
+export function mountObjectPermissions(file: any) {
+  var mapOfObjPermissions= new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      if (json.Profile.objectPermissions != null) {
+        for (let obj of json.Profile.objectPermissions) {
+          mapOfObjPermissions.set(obj.object.toString(), obj);
+        }
+      }
+    }
+  });
+  return mapOfObjPermissions;
+}
+
 // MERGE FUNCTIONS
 
 export function mergeFieldPermissions(mapOfFieldObjTarget: Map<any, any>, mapOfFieldObjSource: Map<any, any>) {
@@ -141,6 +227,92 @@ export function mergeCustomMdtAccesses(mapUserPermissionTarget: Map<any, any>, m
   }
 
   return arrayCustomMdtAccesses;
+
+}
+
+export function mergeCustomPermissions(mapCustomPermissionTarget: Map<any, any>, mapCustomPermissionSource: Map<any, any>) {
+  var arrayCustomMdtAccesses = new Array();
+  for (let name of mapCustomPermissionSource.keys()) {
+    if (mapCustomPermissionTarget.has(name) == true) {
+      var targetCustomMdt = mapCustomPermissionTarget.get(name);
+      targetCustomMdt.enabled = mapCustomPermissionSource.get(name).enabled;
+      arrayCustomMdtAccesses.push(targetCustomMdt);
+    } else {
+      arrayCustomMdtAccesses.push(mapCustomPermissionSource.get(name.toString()));
+    }
+  }
+
+  return arrayCustomMdtAccesses;
+
+}
+
+export function mergeClassAccesses(mapClassAccessesTarget: Map<any, any>, mapUserClassAccessesSource: Map<any, any>) {
+  var arrayClassAccesses = new Array();
+  for (let apexClass of mapUserClassAccessesSource.keys()) {
+    if (mapClassAccessesTarget.has(apexClass) == true) {
+      var targetClassAccesses = mapClassAccessesTarget.get(apexClass);
+      targetClassAccesses.enabled = mapUserClassAccessesSource.get(apexClass).enabled;
+      arrayClassAccesses.push(targetClassAccesses);
+    } else {
+      arrayClassAccesses.push(mapUserClassAccessesSource.get(apexClass.toString()));
+    }
+  }
+
+  return arrayClassAccesses;
+
+}
+
+export function mergeCustomSettings(mapCustomSettingsTarget: Map<any, any>, mapCustomSettingsSource: Map<any, any>) {
+  var arrayCustomSettings = new Array();
+  for (let customSettings of mapCustomSettingsSource.keys()) {
+    if (mapCustomSettingsTarget.has(customSettings) == true) {
+      var targetClassAccesses = mapCustomSettingsTarget.get(customSettings);
+      targetClassAccesses.enabled = mapCustomSettingsSource.get(customSettings).enabled;
+      arrayCustomSettings.push(targetClassAccesses);
+    } else {
+      arrayCustomSettings.push(mapCustomSettingsSource.get(customSettings.toString()));
+    }
+  }
+
+  return arrayCustomSettings;
+
+}
+
+export function mergeApplicationVisibilities(mapAppVisibilitiesTarget: Map<any, any>, mapAppVisibilitiesSource: Map<any, any>) {
+  var arrayAppVisibilities = new Array();
+  for (let customSettings of mapAppVisibilitiesSource.keys()) {
+    if (mapAppVisibilitiesTarget.has(customSettings) == true) {
+      var targetClassAccesses = mapAppVisibilitiesTarget.get(customSettings);
+      targetClassAccesses.default = mapAppVisibilitiesSource.get(customSettings).default;
+      targetClassAccesses.visible = mapAppVisibilitiesSource.get(customSettings).visible;
+      arrayAppVisibilities.push(targetClassAccesses);
+    } else {
+      arrayAppVisibilities.push(mapAppVisibilitiesSource.get(customSettings.toString()));
+    }
+  }
+
+  return arrayAppVisibilities;
+
+}
+
+export function mergeObjectPermissions(mapObjPermTarget: Map<any, any>, mapObjPermSource: Map<any, any>) {
+  var arrayObjPermissions = new Array();
+  for (let customSettings of mapObjPermSource.keys()) {
+    if (mapObjPermTarget.has(customSettings) == true) {
+      var targetClassAccesses = mapObjPermTarget.get(customSettings);
+      targetClassAccesses.allowCreate = mapObjPermSource.get(customSettings).allowCreate;
+      targetClassAccesses.allowDelete = mapObjPermSource.get(customSettings).allowDelete;
+      targetClassAccesses.allowEdit = mapObjPermSource.get(customSettings).allowEdit;
+      targetClassAccesses.allowRead = mapObjPermSource.get(customSettings).allowRead;
+      targetClassAccesses.modifyAllRecords = mapObjPermSource.get(customSettings).modifyAllRecords;
+      targetClassAccesses.viewAllRecords = mapObjPermSource.get(customSettings).viewAllRecords;
+      arrayObjPermissions.push(targetClassAccesses);
+    } else {
+      arrayObjPermissions.push(mapObjPermSource.get(customSettings.toString()));
+    }
+  }
+
+  return arrayObjPermissions;
 
 }
 
