@@ -114,3 +114,22 @@
     return profile;
 /*     return objectRetorno;
  */  }
+
+
+
+ 
+    /* // START - CHANGE FIELD PERMISSIONS
+    for (let field of mapOfFieldObjSource.keys()) {
+      if (mapOfFieldObjTarget.has(field) == true) {
+        var targetField = mapOfFieldObjTarget.get(field);
+        targetField.editable = mapOfFieldObjSource.get(field).editable;
+        targetField.readable = mapOfFieldObjTarget.get(field).readable;
+        arrayFieldPermission.push(targetField);
+      } else {
+        var newFieldPermission = mapOfFieldObjSource.get(field.toString());
+        arrayFieldPermission.push(newFieldPermission);
+      }
+    }
+
+    // END - CHANGE FIELD PERMISSIONS
+ */
