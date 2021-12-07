@@ -86,7 +86,7 @@ export function mountCustomPermissions(file: any) {
 }
 
 export function mountClassAccesses(file: any) {
-  var mapOfCustomPermission = new Map();
+  var mapOfClassAccesses = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
       console.log(err);
@@ -94,12 +94,29 @@ export function mountClassAccesses(file: any) {
       var json = result;
       if (json.Profile.classAccesses != null) {
         for (let obj of json.Profile.classAccesses) {
-          mapOfCustomPermission.set(obj.apexClass.toString(), obj);
+          mapOfClassAccesses.set(obj.apexClass.toString(), obj);
         }
       }
     }
   });
-  return mapOfCustomPermission;
+  return mapOfClassAccesses;
+}
+
+export function mountCustomSettingAccesses(file: any) {
+  var mapOfCustomSettings= new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      if (json.Profile.customSettingAccesses != null) {
+        for (let obj of json.Profile.customSettingAccesses) {
+          mapOfCustomSettings.set(obj.name.toString(), obj);
+        }
+      }
+    }
+  });
+  return mapOfCustomSettings;
 }
 
 // MERGE FUNCTIONS
@@ -207,6 +224,22 @@ export function mergeClassAccesses(mapClassAccessesTarget: Map<any, any>, mapUse
   }
 
   return arrayClassAccesses;
+
+}
+
+export function mergeCustomSettings(mapCustomSettingsTarget: Map<any, any>, mapCustomSettingsSource: Map<any, any>) {
+  var arrayCustomSettings = new Array();
+  for (let customSettings of mapCustomSettingsSource.keys()) {
+    if (mapCustomSettingsTarget.has(customSettings) == true) {
+      var targetClassAccesses = mapCustomSettingsTarget.get(customSettings);
+      targetClassAccesses.enabled = mapCustomSettingsSource.get(customSettings).enabled;
+      arrayCustomSettings.push(targetClassAccesses);
+    } else {
+      arrayCustomSettings.push(mapCustomSettingsSource.get(customSettings.toString()));
+    }
+  }
+
+  return arrayCustomSettings;
 
 }
 

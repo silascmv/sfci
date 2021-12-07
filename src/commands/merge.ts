@@ -82,9 +82,14 @@ export default class Merge extends Command {
     //  CustomPermissions MAPS
     var mapCustomPermissionsTarget = mergeUtils.mountCustomPermissions(target);
     var mapCustomPermissionsSource = mergeUtils.mountCustomPermissions(source);
-    //  CustomPermissions MAPS
+    //  Class Accesses MAPS
     var mapClassAccessesTarget = mergeUtils.mountClassAccesses(target);
     var mapClassAccessesSource = mergeUtils.mountClassAccesses(source);
+    //  CustomSettingAccesses MAPS
+    var mapCustomSettingsTarget = mergeUtils.mountCustomSettingAccesses(target);
+    var mapCCustomSettingsSource = mergeUtils.mountCustomSettingAccesses(source);
+  
+  
    
     sourceFile.Profile.fieldPermissions = mergeUtils.mergeFieldPermissions(mapOfFieldObjTarget,mapOfFieldObjSource);
     sourceFile.Profile.userPermissions = mergeUtils.mergeUserPermissions(mapUserPermissionTarget,mapUserPermissionSource); 
@@ -92,6 +97,7 @@ export default class Merge extends Command {
     sourceFile.Profile.customMetadataTypeAccesses = mergeUtils.mergeCustomMdtAccesses(mapCustomMdtAccessesTarget,mapCustomMdtAccessesSource); 
     sourceFile.Profile.customPermissions = mergeUtils.mergeCustomPermissions(mapCustomPermissionsTarget,mapCustomPermissionsSource); 
     sourceFile.Profile.classAccesses = mergeUtils.mergeClassAccesses(mapClassAccessesTarget,mapClassAccessesSource); 
+    sourceFile.Profile.customSettingAccesses = mergeUtils.mergeClassAccesses(mapCustomSettingsTarget,mapCCustomSettingsSource); 
 
     mergeUtils.writeChanges(sourceFile,this.targetFolder,fileName);
 
