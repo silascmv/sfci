@@ -68,6 +68,40 @@ export function mountCustomMetadataTypeAccesses(file: any) {
   return mapOfCustomMdtAccess;
 }
 
+export function mountCustomPermissions(file: any) {
+  var mapOfCustomPermission = new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      if (json.Profile.customPermissions != null) {
+        for (let obj of json.Profile.customPermissions) {
+          mapOfCustomPermission.set(obj.name.toString(), obj);
+        }
+      }
+    }
+  });
+  return mapOfCustomPermission;
+}
+
+export function mountClassAccesses(file: any) {
+  var mapOfCustomPermission = new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      if (json.Profile.classAccesses != null) {
+        for (let obj of json.Profile.classAccesses) {
+          mapOfCustomPermission.set(obj.apexClass.toString(), obj);
+        }
+      }
+    }
+  });
+  return mapOfCustomPermission;
+}
+
 // MERGE FUNCTIONS
 
 export function mergeFieldPermissions(mapOfFieldObjTarget: Map<any, any>, mapOfFieldObjSource: Map<any, any>) {
@@ -141,6 +175,38 @@ export function mergeCustomMdtAccesses(mapUserPermissionTarget: Map<any, any>, m
   }
 
   return arrayCustomMdtAccesses;
+
+}
+
+export function mergeCustomPermissions(mapCustomPermissionTarget: Map<any, any>, mapCustomPermissionSource: Map<any, any>) {
+  var arrayCustomMdtAccesses = new Array();
+  for (let name of mapCustomPermissionSource.keys()) {
+    if (mapCustomPermissionTarget.has(name) == true) {
+      var targetCustomMdt = mapCustomPermissionTarget.get(name);
+      targetCustomMdt.enabled = mapCustomPermissionSource.get(name).enabled;
+      arrayCustomMdtAccesses.push(targetCustomMdt);
+    } else {
+      arrayCustomMdtAccesses.push(mapCustomPermissionSource.get(name.toString()));
+    }
+  }
+
+  return arrayCustomMdtAccesses;
+
+}
+
+export function mergeClassAccesses(mapClassAccessesTarget: Map<any, any>, mapUserClassAccessesSource: Map<any, any>) {
+  var arrayClassAccesses = new Array();
+  for (let apexClass of mapUserClassAccessesSource.keys()) {
+    if (mapClassAccessesTarget.has(apexClass) == true) {
+      var targetClassAccesses = mapClassAccessesTarget.get(apexClass);
+      targetClassAccesses.enabled = mapUserClassAccessesSource.get(apexClass).enabled;
+      arrayClassAccesses.push(targetClassAccesses);
+    } else {
+      arrayClassAccesses.push(mapUserClassAccessesSource.get(apexClass.toString()));
+    }
+  }
+
+  return arrayClassAccesses;
 
 }
 
