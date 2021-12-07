@@ -2,7 +2,7 @@ import * as xml2js from 'xml2js';
 import * as fs from 'fs';
 // CREATE MAP FUNCTIONS
 
-export function mountMapFieldPermission (file: any){
+export function mountMapFieldPermission(file: any) {
   var mapOfFieldPerm = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
@@ -18,43 +18,43 @@ export function mountMapFieldPermission (file: any){
   return mapOfFieldPerm;
 }
 
-export function mountMapUserPermission(file: any){
-    var mapOfFieldPerm = new Map();
-    xml2js.parseString(file, (err: Error, result: any) => {
-      if (err) {
-        console.log(err);
-      } else {
-        var json = result;
-        for (let x of json.Profile.userPermissions) {
-          /*   console.log(x);*/
-          mapOfFieldPerm.set(x.name.toString(), x);
-        }
+export function mountMapUserPermission(file: any) {
+  var mapOfFieldPerm = new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      for (let x of json.Profile.userPermissions) {
+        /*   console.log(x);*/
+        mapOfFieldPerm.set(x.name.toString(), x);
       }
-    });
-    return mapOfFieldPerm;
+    }
+  });
+  return mapOfFieldPerm;
 }
 
-export function mountMapLayoutAssignments(file: any){
-    var mapOfFieldPerm = new Map();
-    xml2js.parseString(file, (err: Error, result: any) => {
-      if (err) {
-        console.log(err);
-      } else {
-        var json = result;
+export function mountMapLayoutAssignments(file: any) {
+  var mapOfFieldPerm = new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
 /*         console.log('mountMapLayoutAssignments',json.Profile.layoutAssignments);
- */        if(json.Profile.layoutAssignments != null){
-          for (let x of json.Profile.layoutAssignments) {
-            mapOfFieldPerm.set(x.layout.toString(), x);
-          }
+ */        if (json.Profile.layoutAssignments != null) {
+        for (let x of json.Profile.layoutAssignments) {
+          mapOfFieldPerm.set(x.layout.toString(), x);
         }
       }
-    });
-    return mapOfFieldPerm;
+    }
+  });
+  return mapOfFieldPerm;
 }
 
 // MERGE FUNCTIONS
 
-export function mergeFieldPermissions(mapOfFieldObjTarget: Map<any,any>,mapOfFieldObjSource: Map<any,any>){
+export function mergeFieldPermissions(mapOfFieldObjTarget: Map<any, any>, mapOfFieldObjSource: Map<any, any>) {
   var arrayFieldPermission = new Array();
   for (let field of mapOfFieldObjSource.keys()) {
     if (mapOfFieldObjTarget.has(field) == true) {
@@ -71,7 +71,7 @@ export function mergeFieldPermissions(mapOfFieldObjTarget: Map<any,any>,mapOfFie
 
 }
 
-export function mergeUserPermissions(mapUserPermissionTarget: Map<any,any>,mapUserPermissionSource: Map<any,any>){
+export function mergeUserPermissions(mapUserPermissionTarget: Map<any, any>, mapUserPermissionSource: Map<any, any>) {
   var arrayUserPermission = new Array();
   for (let field of mapUserPermissionSource.keys()) {
     if (mapUserPermissionTarget.has(field) == true) {
@@ -88,17 +88,25 @@ export function mergeUserPermissions(mapUserPermissionTarget: Map<any,any>,mapUs
 }
 
 // SPECIFIC INFORMATIONS ( CASE THE TARGET FILE HAS THE PERMISSION, ONLY VERIFIY IF CHANGE RECORDTYPE)
-export function mergeLayoutAssignments(mapLayoutAssignmentsTarget: Map<any,any>,mapLayoutAssignmentsSource: Map<any,any>){
+export function mergeLayoutAssignments(mapLayoutAssignmentsTarget: Map<any, any>, mapLayoutAssignmentsSource: Map<any, any>) {
   var arrayLayoutAssigments = new Array();
-  console.log( mapLayoutAssignmentsSource.keys());
-  for (let field of mapLayoutAssignmentsSource.keys()) {
-    if (mapLayoutAssignmentsTarget.has(field) == true) {
-      var targetLayoutPerm = mapLayoutAssignmentsTarget.get(field);
-      targetLayoutPerm.recordType = mapLayoutAssignmentsSource.get(field).recordType != mapLayoutAssignmentsTarget.get(field).recordType? 
-                                    mapLayoutAssignmentsSource.get(field).recordType :  mapLayoutAssignmentsTarget.get(field).recordType ;
-      arrayLayoutAssigments.push(targetLayoutPerm);
+  for (let layout of mapLayoutAssignmentsSource.keys()) {
+    console.log(layout);
+    if (mapLayoutAssignmentsTarget.has(layout) == true) {
+      var targetLayoutPerm = mapLayoutAssignmentsTarget.get(layout);
+      if (targetLayoutPerm.recordType != null && mapLayoutAssignmentsSource.get(layout).recordType == null) {
+        delete targetLayoutPerm.recordType;
+        arrayLayoutAssigments.push(targetLayoutPerm);
+      } else if (targetLayoutPerm.recordType == null && mapLayoutAssignmentsSource.get(layout).recordType != null) {
+        targetLayoutPerm.recordType = mapLayoutAssignmentsSource.get(layout).recordType;
+        arrayLayoutAssigments.push(targetLayoutPerm);
+      } else if (targetLayoutPerm.recordType == null && mapLayoutAssignmentsSource.get(layout).recordType != null) {
+        arrayLayoutAssigments.push(targetLayoutPerm);
+      } else {
+        arrayLayoutAssigments.push(targetLayoutPerm);
+      }
     } else {
-      arrayLayoutAssigments.push(mapLayoutAssignmentsSource.get(field.toString()));
+      arrayLayoutAssigments.push(mapLayoutAssignmentsSource.get(layout.toString()));
     }
   }
   return arrayLayoutAssigments;
@@ -107,27 +115,27 @@ export function mergeLayoutAssignments(mapLayoutAssignmentsTarget: Map<any,any>,
 
 // FILES FUNCTIONS
 export function getFilesInFolders(folder: string) {
-    let allFilesInDir = new Map(fs.readdirSync(folder, 'utf8').entries());
-    let mapRetorno = new Map();
-    for (let entry of allFilesInDir.values()) {
-      mapRetorno.set(entry, fs.readFileSync(folder + '/' + entry, { encoding: 'utf8', flag: 'r' }));
-    }
-    return mapRetorno;
+  let allFilesInDir = new Map(fs.readdirSync(folder, 'utf8').entries());
+  let mapRetorno = new Map();
+  for (let entry of allFilesInDir.values()) {
+    mapRetorno.set(entry, fs.readFileSync(folder + '/' + entry, { encoding: 'utf8', flag: 'r' }));
   }
-
-
-export function moveFilesToTarget(fileName: string, source: string, target: string) {
-    fs.copyFileSync(process.cwd() + '/' + source + '/' + fileName, process.cwd() + '/' + target + '/' + fileName);
-  }
-
-export function writeChanges(sourceFile: any, targetFolder: any, fileName: any){
-    var builder = new xml2js.Builder({ renderOpts: { pretty: true, 'indent': '    ', 'newline': '\n' } });
-    var xml = builder.buildObject(sourceFile);
-    fs.writeFileSync(targetFolder + '/' + fileName, xml);
+  return mapRetorno;
 }
 
 
-export function convertFile(file: any){
+export function moveFilesToTarget(fileName: string, source: string, target: string) {
+  fs.copyFileSync(process.cwd() + '/' + source + '/' + fileName, process.cwd() + '/' + target + '/' + fileName);
+}
+
+export function writeChanges(sourceFile: any, targetFolder: any, fileName: any) {
+  var builder = new xml2js.Builder({ renderOpts: { pretty: true, 'indent': '    ', 'newline': '\n' } });
+  var xml = builder.buildObject(sourceFile);
+  fs.writeFileSync(targetFolder + '/' + fileName, xml);
+}
+
+
+export function convertFile(file: any) {
   var resultado;
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
