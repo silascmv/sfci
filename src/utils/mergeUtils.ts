@@ -117,6 +117,41 @@ export function mountCustomSettingAccesses(file: any) {
     }
   });
   return mapOfCustomSettings;
+
+
+}
+export function mountApplicationVisibilities(file: any) {
+  var mapOfApplicationVisibilities= new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      if (json.Profile.applicationVisibilities != null) {
+        for (let obj of json.Profile.applicationVisibilities) {
+          mapOfApplicationVisibilities.set(obj.application.toString(), obj);
+        }
+      }
+    }
+  });
+  return mapOfApplicationVisibilities;
+}
+
+export function mountObjectPermissions(file: any) {
+  var mapOfObjPermissions= new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      if (json.Profile.objectPermissions != null) {
+        for (let obj of json.Profile.objectPermissions) {
+          mapOfObjPermissions.set(obj.object.toString(), obj);
+        }
+      }
+    }
+  });
+  return mapOfObjPermissions;
 }
 
 // MERGE FUNCTIONS
@@ -240,6 +275,44 @@ export function mergeCustomSettings(mapCustomSettingsTarget: Map<any, any>, mapC
   }
 
   return arrayCustomSettings;
+
+}
+
+export function mergeApplicationVisibilities(mapAppVisibilitiesTarget: Map<any, any>, mapAppVisibilitiesSource: Map<any, any>) {
+  var arrayAppVisibilities = new Array();
+  for (let customSettings of mapAppVisibilitiesSource.keys()) {
+    if (mapAppVisibilitiesTarget.has(customSettings) == true) {
+      var targetClassAccesses = mapAppVisibilitiesTarget.get(customSettings);
+      targetClassAccesses.default = mapAppVisibilitiesSource.get(customSettings).default;
+      targetClassAccesses.visible = mapAppVisibilitiesSource.get(customSettings).visible;
+      arrayAppVisibilities.push(targetClassAccesses);
+    } else {
+      arrayAppVisibilities.push(mapAppVisibilitiesSource.get(customSettings.toString()));
+    }
+  }
+
+  return arrayAppVisibilities;
+
+}
+
+export function mergeObjectPermissions(mapObjPermTarget: Map<any, any>, mapObjPermSource: Map<any, any>) {
+  var arrayObjPermissions = new Array();
+  for (let customSettings of mapObjPermSource.keys()) {
+    if (mapObjPermTarget.has(customSettings) == true) {
+      var targetClassAccesses = mapObjPermTarget.get(customSettings);
+      targetClassAccesses.allowCreate = mapObjPermSource.get(customSettings).allowCreate;
+      targetClassAccesses.allowDelete = mapObjPermSource.get(customSettings).allowDelete;
+      targetClassAccesses.allowEdit = mapObjPermSource.get(customSettings).allowEdit;
+      targetClassAccesses.allowRead = mapObjPermSource.get(customSettings).allowRead;
+      targetClassAccesses.modifyAllRecords = mapObjPermSource.get(customSettings).modifyAllRecords;
+      targetClassAccesses.viewAllRecords = mapObjPermSource.get(customSettings).viewAllRecords;
+      arrayObjPermissions.push(targetClassAccesses);
+    } else {
+      arrayObjPermissions.push(mapObjPermSource.get(customSettings.toString()));
+    }
+  }
+
+  return arrayObjPermissions;
 
 }
 
