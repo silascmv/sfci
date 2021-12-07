@@ -1,7 +1,7 @@
 import * as xml2js from 'xml2js';
 import * as fs from 'fs';
-// CREATE MAP FUNCTIONS
 
+// CREATE MAP FUNCTIONS
 export function mountMapFieldPermission(file: any) {
   var mapOfFieldPerm = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
@@ -19,37 +19,53 @@ export function mountMapFieldPermission(file: any) {
 }
 
 export function mountMapUserPermission(file: any) {
-  var mapOfFieldPerm = new Map();
+  var mapUserPermission = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
       console.log(err);
     } else {
       var json = result;
-      for (let x of json.Profile.userPermissions) {
+      for (let usrPerm of json.Profile.userPermissions) {
         /*   console.log(x);*/
-        mapOfFieldPerm.set(x.name.toString(), x);
+        mapUserPermission.set(usrPerm.name.toString(), usrPerm);
       }
     }
   });
-  return mapOfFieldPerm;
+  return mapUserPermission;
 }
 
 export function mountMapLayoutAssignments(file: any) {
-  var mapOfFieldPerm = new Map();
+  var mapOfLayoutAssignments = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
       console.log(err);
     } else {
       var json = result;
-/*         console.log('mountMapLayoutAssignments',json.Profile.layoutAssignments);
- */        if (json.Profile.layoutAssignments != null) {
+      if (json.Profile.layoutAssignments != null) {
         for (let x of json.Profile.layoutAssignments) {
-          mapOfFieldPerm.set(x.layout.toString(), x);
+          mapOfLayoutAssignments.set(x.layout.toString(), x);
         }
       }
     }
   });
-  return mapOfFieldPerm;
+  return mapOfLayoutAssignments;
+}
+
+export function mountCustomMetadataTypeAccesses(file: any) {
+  var mapOfCustomMdtAccess = new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      if (json.Profile.customMetadataTypeAccesses != null) {
+        for (let obj of json.Profile.customMetadataTypeAccesses) {
+          mapOfCustomMdtAccess.set(obj.name.toString(), obj);
+        }
+      }
+    }
+  });
+  return mapOfCustomMdtAccess;
 }
 
 // MERGE FUNCTIONS
@@ -110,6 +126,22 @@ export function mergeLayoutAssignments(mapLayoutAssignmentsTarget: Map<any, any>
     }
   }
   return arrayLayoutAssigments;
+}
+
+export function mergeCustomMdtAccesses(mapUserPermissionTarget: Map<any, any>, mapUserPermissionSource: Map<any, any>) {
+  var arrayCustomMdtAccesses = new Array();
+  for (let name of mapUserPermissionSource.keys()) {
+    if (mapUserPermissionTarget.has(name) == true) {
+      var targetCustomMdt = mapUserPermissionTarget.get(name);
+      targetCustomMdt.enabled = mapUserPermissionSource.get(name).enabled;
+      arrayCustomMdtAccesses.push(targetCustomMdt);
+    } else {
+      arrayCustomMdtAccesses.push(mapUserPermissionSource.get(name.toString()));
+    }
+  }
+
+  return arrayCustomMdtAccesses;
+
 }
 
 

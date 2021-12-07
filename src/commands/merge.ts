@@ -76,10 +76,14 @@ export default class Merge extends Command {
     // LAYOUT ASSINGMENTS PERMISSION MAPS
     var mapLayoutAssignmentsTarget = mergeUtils.mountMapLayoutAssignments(target);
     var mapLayoutAssignmentsSource = mergeUtils.mountMapLayoutAssignments(source);
+    //  customMetadataTypeAccesses PERMISSION MAPS
+    var mapCustomMdtAccessesTarget = mergeUtils.mountCustomMetadataTypeAccesses(target);
+    var mapCustomMdtAccessesSource = mergeUtils.mountCustomMetadataTypeAccesses(source);
 
     sourceFile.Profile.fieldPermissions = mergeUtils.mergeFieldPermissions(mapOfFieldObjTarget,mapOfFieldObjSource);
     sourceFile.Profile.userPermissions = mergeUtils.mergeUserPermissions(mapUserPermissionTarget,mapUserPermissionSource); 
     sourceFile.Profile.layoutAssignments = mergeUtils.mergeLayoutAssignments(mapLayoutAssignmentsTarget,mapLayoutAssignmentsSource); 
+    sourceFile.Profile.customMetadataTypeAccesses = mergeUtils.mergeCustomMdtAccesses(mapCustomMdtAccessesTarget,mapCustomMdtAccessesSource); 
 
     mergeUtils.writeChanges(sourceFile,this.targetFolder,fileName);
 
