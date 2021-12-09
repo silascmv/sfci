@@ -103,7 +103,7 @@ export function mountClassAccesses(file: any) {
 }
 
 export function mountCustomSettingAccesses(file: any) {
-  var mapOfCustomSettings= new Map();
+  var mapOfCustomSettings = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
       console.log(err);
@@ -121,7 +121,7 @@ export function mountCustomSettingAccesses(file: any) {
 
 }
 export function mountApplicationVisibilities(file: any) {
-  var mapOfApplicationVisibilities= new Map();
+  var mapOfApplicationVisibilities = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
       console.log(err);
@@ -138,7 +138,7 @@ export function mountApplicationVisibilities(file: any) {
 }
 
 export function mountObjectPermissions(file: any) {
-  var mapOfObjPermissions= new Map();
+  var mapOfObjPermissions = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
       console.log(err);
@@ -152,6 +152,23 @@ export function mountObjectPermissions(file: any) {
     }
   });
   return mapOfObjPermissions;
+}
+
+export function mountLoginFlows(file: any) {
+  var mapOfLoginFlows = new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      if (json.Profile.loginFlows != null) {
+        for (let obj of json.Profile.loginFlows) {
+          mapOfLoginFlows.set(obj.friendlyName.toString(), obj);
+        }
+      }
+    }
+  });
+  return mapOfLoginFlows;
 }
 
 // MERGE FUNCTIONS
@@ -280,14 +297,14 @@ export function mergeCustomSettings(mapCustomSettingsTarget: Map<any, any>, mapC
 
 export function mergeApplicationVisibilities(mapAppVisibilitiesTarget: Map<any, any>, mapAppVisibilitiesSource: Map<any, any>) {
   var arrayAppVisibilities = new Array();
-  for (let customSettings of mapAppVisibilitiesSource.keys()) {
-    if (mapAppVisibilitiesTarget.has(customSettings) == true) {
-      var targetClassAccesses = mapAppVisibilitiesTarget.get(customSettings);
-      targetClassAccesses.default = mapAppVisibilitiesSource.get(customSettings).default;
-      targetClassAccesses.visible = mapAppVisibilitiesSource.get(customSettings).visible;
-      arrayAppVisibilities.push(targetClassAccesses);
+  for (let appVisibilities of mapAppVisibilitiesSource.keys()) {
+    if (mapAppVisibilitiesTarget.has(appVisibilities) == true) {
+      var app = mapAppVisibilitiesTarget.get(appVisibilities);
+      app.default = mapAppVisibilitiesSource.get(appVisibilities).default;
+      app.visible = mapAppVisibilitiesSource.get(appVisibilities).visible;
+      arrayAppVisibilities.push(app);
     } else {
-      arrayAppVisibilities.push(mapAppVisibilitiesSource.get(customSettings.toString()));
+      arrayAppVisibilities.push(mapAppVisibilitiesSource.get(appVisibilities.toString()));
     }
   }
 
@@ -297,22 +314,54 @@ export function mergeApplicationVisibilities(mapAppVisibilitiesTarget: Map<any, 
 
 export function mergeObjectPermissions(mapObjPermTarget: Map<any, any>, mapObjPermSource: Map<any, any>) {
   var arrayObjPermissions = new Array();
-  for (let customSettings of mapObjPermSource.keys()) {
-    if (mapObjPermTarget.has(customSettings) == true) {
-      var targetClassAccesses = mapObjPermTarget.get(customSettings);
-      targetClassAccesses.allowCreate = mapObjPermSource.get(customSettings).allowCreate;
-      targetClassAccesses.allowDelete = mapObjPermSource.get(customSettings).allowDelete;
-      targetClassAccesses.allowEdit = mapObjPermSource.get(customSettings).allowEdit;
-      targetClassAccesses.allowRead = mapObjPermSource.get(customSettings).allowRead;
-      targetClassAccesses.modifyAllRecords = mapObjPermSource.get(customSettings).modifyAllRecords;
-      targetClassAccesses.viewAllRecords = mapObjPermSource.get(customSettings).viewAllRecords;
-      arrayObjPermissions.push(targetClassAccesses);
+  for (let objtPermission of mapObjPermSource.keys()) {
+    if (mapObjPermTarget.has(objtPermission) == true) {
+      var objtTarget = mapObjPermTarget.get(objtPermission);
+      objtTarget.allowCreate = mapObjPermSource.get(objtPermission).allowCreate;
+      objtTarget.allowDelete = mapObjPermSource.get(objtPermission).allowDelete;
+      objtTarget.allowEdit = mapObjPermSource.get(objtPermission).allowEdit;
+      objtTarget.allowRead = mapObjPermSource.get(objtPermission).allowRead;
+      objtTarget.modifyAllRecords = mapObjPermSource.get(objtPermission).modifyAllRecords;
+      objtTarget.viewAllRecords = mapObjPermSource.get(objtPermission).viewAllRecords;
+      arrayObjPermissions.push(objtTarget);
     } else {
-      arrayObjPermissions.push(mapObjPermSource.get(customSettings.toString()));
+      arrayObjPermissions.push(mapObjPermSource.get(objtPermission.toString()));
     }
   }
 
   return arrayObjPermissions;
+
+}
+// SPECIFIC INFORMATIONS ( OBTAIN CHANGES ONLY IN THE SAME TYPE) - IF CHANGE TYPE, IS NEEDLY MANUAL ACTIONS
+export function mergeLoginFlows(mapLoginFlowsTarget: Map<any, any>, mapLoginFlowsSource: Map<any, any>) {
+  var arrayLoginFlows = new Array();
+  for (let loginFlows of mapLoginFlowsSource.keys()) {
+    if (mapLoginFlowsTarget.has(loginFlows) == true) {
+      var loginFlowsObj = mapLoginFlowsTarget.get(loginFlows);
+      if (mapLoginFlowsTarget.get(loginFlows).uiLoginFlowType.toString() == mapLoginFlowsSource.get(loginFlows).uiLoginFlowType.toString()) {
+        
+        if (loginFlowsObj.uiLoginFlowType == 'VisualForce') {
+          loginFlowsObj.vfFlowPage = mapLoginFlowsSource.get(loginFlows).vfFlowPage;
+          loginFlowsObj.vfFlowPageTitle = mapLoginFlowsSource.get(loginFlows).vfFlowPageTitle;
+          loginFlowsObj.useLightningRuntime = mapLoginFlowsSource.get(loginFlows).useLightningRuntime;
+
+        } else if (loginFlowsObj.uiLoginFlowType == 'VisualWorkflow') {
+          loginFlowsObj.flow = mapLoginFlowsSource.get(loginFlows).flow;
+          loginFlowsObj.useLightningRuntime = mapLoginFlowsSource.get(loginFlows).useLightningRuntime;
+
+        }
+      } 
+
+      arrayLoginFlows.push(loginFlowsObj);
+
+    } else {
+
+      arrayLoginFlows.push(mapLoginFlowsSource.get(loginFlows.toString()));
+
+    }
+  }
+
+  return arrayLoginFlows;
 
 }
 
