@@ -171,6 +171,23 @@ export function mountLoginFlows(file: any) {
   return mapOfLoginFlows;
 }
 
+export function mountPageAccess(file: any) {
+  var mapOfLoginFlows = new Map();
+  xml2js.parseString(file, (err: Error, result: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = result;
+      if (json.Profile.pageAccesses != null) {
+        for (let page of json.Profile.pageAccesses) {
+          mapOfLoginFlows.set(page.apexPage.toString(), page);
+        }
+      }
+    }
+  });
+  return mapOfLoginFlows;
+}
+
 // MERGE FUNCTIONS
 
 export function mergeFieldPermissions(mapOfFieldObjTarget: Map<any, any>, mapOfFieldObjSource: Map<any, any>) {
@@ -364,6 +381,23 @@ export function mergeLoginFlows(mapLoginFlowsTarget: Map<any, any>, mapLoginFlow
   return arrayLoginFlows;
 
 }
+
+export function mergePageAccesses(mapPageAccessesTarget: Map<any, any>, mapPageAccessesSource: Map<any, any>) {
+  var arrayCustomSettings = new Array();
+  for (let page of mapPageAccessesSource.keys()) {
+    if (mapPageAccessesTarget.has(page) == true) {
+      var targetClassAccesses = mapPageAccessesTarget.get(page);
+      targetClassAccesses.enabled = mapPageAccessesSource.get(page).enabled;
+      arrayCustomSettings.push(targetClassAccesses);
+    } else {
+      arrayCustomSettings.push(mapPageAccessesSource.get(page.toString()));
+    }
+  }
+
+  return arrayCustomSettings;
+
+}
+
 
 
 // FILES FUNCTIONS
