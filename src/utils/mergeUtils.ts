@@ -356,7 +356,7 @@ export function mergeLoginFlows(mapLoginFlowsTarget: Map<any, any>, mapLoginFlow
     if (mapLoginFlowsTarget.has(loginFlows) == true) {
       var loginFlowsObj = mapLoginFlowsTarget.get(loginFlows);
       if (mapLoginFlowsTarget.get(loginFlows).uiLoginFlowType.toString() == mapLoginFlowsSource.get(loginFlows).uiLoginFlowType.toString()) {
-        
+
         if (loginFlowsObj.uiLoginFlowType == 'VisualForce') {
           loginFlowsObj.vfFlowPage = mapLoginFlowsSource.get(loginFlows).vfFlowPage;
           loginFlowsObj.vfFlowPageTitle = mapLoginFlowsSource.get(loginFlows).vfFlowPageTitle;
@@ -367,7 +367,7 @@ export function mergeLoginFlows(mapLoginFlowsTarget: Map<any, any>, mapLoginFlow
           loginFlowsObj.useLightningRuntime = mapLoginFlowsSource.get(loginFlows).useLightningRuntime;
 
         }
-      } 
+      }
 
       arrayLoginFlows.push(loginFlowsObj);
 
@@ -416,7 +416,17 @@ export function moveFilesToTarget(fileName: string, source: string, target: stri
 }
 
 export function writeChanges(sourceFile: any, targetFolder: any, fileName: any) {
-  var builder = new xml2js.Builder({ renderOpts: { pretty: true, 'indent': '    ', 'newline': '\n' } });
+  var builder = new xml2js.Builder({
+    xmldec: {
+      version: '1.0',
+      encoding: 'UTF-8',
+      standalone: null
+    }, renderOpts: {
+      pretty: true,
+      indent: '    ',
+      newline: '\n'
+    }
+  });
   var xml = builder.buildObject(sourceFile);
   fs.writeFileSync(targetFolder + '/' + fileName, xml);
 }
