@@ -1,12 +1,13 @@
 import * as xml2js from 'xml2js';
 import * as fs from 'fs';
+const logger = require('./logUtils');
 
 // CREATE MAP FUNCTIONS
 export function mountMapFieldPermission(file: any) {
   var mapOfFieldPerm = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
     } else {
       var json = result;
       for (let x of json.Profile.fieldPermissions) {
@@ -22,7 +23,7 @@ export function mountMapUserPermission(file: any) {
   var mapUserPermission = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
     } else {
       var json = result;
       for (let usrPerm of json.Profile.userPermissions) {
@@ -38,7 +39,7 @@ export function mountMapLayoutAssignments(file: any) {
   var mapOfLayoutAssignments = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
     } else {
       var json = result;
       if (json.Profile.layoutAssignments != null) {
@@ -55,7 +56,7 @@ export function mountCustomMetadataTypeAccesses(file: any) {
   var mapOfCustomMdtAccess = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
     } else {
       var json = result;
       if (json.Profile.customMetadataTypeAccesses != null) {
@@ -72,7 +73,7 @@ export function mountCustomPermissions(file: any) {
   var mapOfCustomPermission = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
     } else {
       var json = result;
       if (json.Profile.customPermissions != null) {
@@ -89,7 +90,7 @@ export function mountClassAccesses(file: any) {
   var mapOfClassAccesses = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
     } else {
       var json = result;
       if (json.Profile.classAccesses != null) {
@@ -106,7 +107,7 @@ export function mountCustomSettingAccesses(file: any) {
   var mapOfCustomSettings = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
     } else {
       var json = result;
       if (json.Profile.customSettingAccesses != null) {
@@ -124,7 +125,7 @@ export function mountApplicationVisibilities(file: any) {
   var mapOfApplicationVisibilities = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
     } else {
       var json = result;
       if (json.Profile.applicationVisibilities != null) {
@@ -141,7 +142,7 @@ export function mountObjectPermissions(file: any) {
   var mapOfObjPermissions = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
     } else {
       var json = result;
       if (json.Profile.objectPermissions != null) {
@@ -158,7 +159,7 @@ export function mountLoginFlows(file: any) {
   var mapOfLoginFlows = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
     } else {
       var json = result;
       if (json.Profile.loginFlows != null) {
@@ -175,7 +176,7 @@ export function mountPageAccess(file: any) {
   var mapOfLoginFlows = new Map();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
     } else {
       var json = result;
       if (json.Profile.pageAccesses != null) {
@@ -420,7 +421,7 @@ export function writeChanges(sourceFile: any, targetFolder: any, fileName: any) 
     xmldec: {
       version: '1.0',
       encoding: 'UTF-8',
-      standalone: null
+      standalone: undefined 
     }, renderOpts: {
       pretty: true,
       indent: '    ',
@@ -436,7 +437,7 @@ export function convertFile(file: any) {
   var resultado;
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
     } else {
       resultado = result;
     }

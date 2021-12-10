@@ -6,3 +6,5 @@
 /tmp
 /yarn.lock
 node_modules
+erro.log
+info.log
