@@ -19,6 +19,10 @@
         <enabled>false</enabled>
         <name>Integration__mdt</name>
     </customMetadataTypeAccesses>
+    <customMetadataTypeAccesses>
+        <enabled>false</enabled>
+        <name>IntegrationTeste__mdt</name>
+    </customMetadataTypeAccesses>
     <customPermissions>
         <enabled>true</enabled>
         <name>Teste</name>
@@ -32,9 +36,9 @@
         <name>CustomSettingsTest__c</name>
     </customSettingAccesses>
     <fieldPermissions>
-        <editable>true</editable>
+        <editable>false</editable>
         <field>Account.Abcde__c</field>
-        <readable>true</readable>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -61,17 +65,11 @@
         <field>Teste__c.DB_Region__c</field>
         <readable>false</readable>
     </fieldPermissions>
-    <layoutAssignments>
-        <layout>Asset-Teste</layout>
-    </layoutAssignments>
-    <layoutAssignments>
-        <layout>Asset-Term</layout>
-        <recordType>Teste</recordType>
-    </layoutAssignments>
-    <layoutAssignments>
-        <layout>Teste-Teste</layout>
-        <recordType>Teste-Teste</recordType>
-    </layoutAssignments>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Opportunity.Testando__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
     <loginFlows>
         <flow>TesteFlow</flow>
         <flowType>UI</flowType>
@@ -825,4 +823,14 @@
         <enabled>true</enabled>
         <name>WorkCalibrationUser</name>
     </userPermissions>
+    <layoutAssignments>
+        <layout>Asset-Teste</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Asset-Testando</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Asset-Term</layout>
+        <recordType>Testando</recordType>
+    </layoutAssignments>
 </Profile>
