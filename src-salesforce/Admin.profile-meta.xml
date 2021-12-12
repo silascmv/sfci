@@ -1,40 +1,56 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Profile xmlns="http://soap.sforce.com/2006/04/metadata">
     <applicationVisibilities>
         <application>Teste</application>
-        <default>false</default>
-        <visible>true</visible>
+        <default>true</default>
+        <visible>false</visible>
     </applicationVisibilities>
     <applicationVisibilities>
         <application>standard__AllTabSet</application>
-        <default>false</default>
-        <visible>true</visible>
+        <default>true</default>
+        <visible>false</visible>
     </applicationVisibilities>
     <classAccesses>
         <apexClass>Teste</apexClass>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CLasseA</apexClass>
+        <enabled>false</enabled>
     </classAccesses>
     <custom>false</custom>
     <customMetadataTypeAccesses>
         <enabled>false</enabled>
         <name>Integration__mdt</name>
     </customMetadataTypeAccesses>
+    <customMetadataTypeAccesses>
+        <enabled>false</enabled>
+        <name>IntegrationTeste__mdt</name>
+    </customMetadataTypeAccesses>
     <customPermissions>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
         <name>Teste</name>
     </customPermissions>
     <customPermissions>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
         <name>DevOps</name>
+    </customPermissions>
+    <customPermissions>
+        <enabled>false</enabled>
+        <name>DevOpsTeste</name>
     </customPermissions>
     <customSettingAccesses>
         <enabled>false</enabled>
         <name>CustomSettingsTest__c</name>
     </customSettingAccesses>
+    <customSettingAccesses>
+        <enabled>false</enabled>
+        <name>CustomSettingsTest</name>
+    </customSettingAccesses>
     <fieldPermissions>
-        <editable>true</editable>
+        <editable>false</editable>
         <field>Account.Abcde__c</field>
-        <readable>true</readable>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -61,16 +77,20 @@
         <field>Teste__c.DB_Region__c</field>
         <readable>false</readable>
     </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Opportunity.Testando__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
     <layoutAssignments>
         <layout>Asset-Teste</layout>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>Asset-Term</layout>
-        <recordType>Asset.TERMTERM</recordType>
+        <layout>Asset-Testando</layout>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>Teste-Teste</layout>
-        <recordType>Teste-Teste</recordType>
+        <layout>Asset-Term</layout>
+        <recordType>Testando</recordType>
     </layoutAssignments>
     <loginFlows>
         <flow>TesteFlow</flow>
@@ -80,11 +100,11 @@
         <useLightningRuntime>true</useLightningRuntime>
     </loginFlows>
     <objectPermissions>
-        <allowCreate>false</allowCreate>
-        <allowDelete>false</allowDelete>
-        <allowEdit>false</allowEdit>
-        <allowRead>false</allowRead>
-        <modifyAllRecords>true</modifyAllRecords>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
         <object>FeedTeste__c</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
