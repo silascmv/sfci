@@ -374,29 +374,45 @@ export default class MergeFile {
   
    mergeClassAccesses(mapClassAccessesTarget: Map<any, any>, mapUserClassAccessesSource: Map<any, any>) {
     var arrayClassAccesses = new Array();
-    for (let apexClass of mapUserClassAccessesSource.keys()) {
-      if (mapClassAccessesTarget.has(apexClass) == true) {
+    for (let apexClass of mapClassAccessesTarget.keys()) {
+      if (mapUserClassAccessesSource.has(apexClass) == true) {
         var targetClassAccesses = mapClassAccessesTarget.get(apexClass);
         targetClassAccesses.enabled = mapUserClassAccessesSource.get(apexClass).enabled;
         arrayClassAccesses.push(targetClassAccesses);
       } else {
-        arrayClassAccesses.push(mapUserClassAccessesSource.get(apexClass.toString()));
+        arrayClassAccesses.push(mapClassAccessesTarget.get(apexClass));
       }
     }
   
+    for (let name of mapUserClassAccessesSource.keys()) {
+      if (mapClassAccessesTarget.has(name) == true) {
+        continue;
+      } else {
+        arrayClassAccesses.push(mapUserClassAccessesSource.get(name));
+      }
+    }
+
     return arrayClassAccesses;
   
   }
   
    mergeCustomSettings(mapCustomSettingsTarget: Map<any, any>, mapCustomSettingsSource: Map<any, any>) {
     var arrayCustomSettings = new Array();
+    for (let customSettings of mapCustomSettingsTarget.keys()) {
+      if (mapCustomSettingsSource.has(customSettings) == true) {
+        var targetCustomSetting = mapCustomSettingsTarget.get(customSettings);
+        targetCustomSetting.enabled = mapCustomSettingsSource.get(customSettings).enabled;
+        arrayCustomSettings.push(targetCustomSetting);
+      } else {
+        arrayCustomSettings.push(mapCustomSettingsTarget.get(customSettings));
+      }
+    }
+  
     for (let customSettings of mapCustomSettingsSource.keys()) {
       if (mapCustomSettingsTarget.has(customSettings) == true) {
-        var targetClassAccesses = mapCustomSettingsTarget.get(customSettings);
-        targetClassAccesses.enabled = mapCustomSettingsSource.get(customSettings).enabled;
-        arrayCustomSettings.push(targetClassAccesses);
+        continue;
       } else {
-        arrayCustomSettings.push(mapCustomSettingsSource.get(customSettings.toString()));
+        arrayCustomSettings.push(mapCustomSettingsSource.get(customSettings));
       }
     }
   
@@ -406,14 +422,23 @@ export default class MergeFile {
   
    mergeApplicationVisibilities(mapAppVisibilitiesTarget: Map<any, any>, mapAppVisibilitiesSource: Map<any, any>) {
     var arrayAppVisibilities = new Array();
-    for (let appVisibilities of mapAppVisibilitiesSource.keys()) {
-      if (mapAppVisibilitiesTarget.has(appVisibilities) == true) {
+   
+    for (let appVisibilities of mapAppVisibilitiesTarget.keys()) {
+      if (mapAppVisibilitiesSource.has(appVisibilities) == true) {
         var app = mapAppVisibilitiesTarget.get(appVisibilities);
         app.default = mapAppVisibilitiesSource.get(appVisibilities).default;
         app.visible = mapAppVisibilitiesSource.get(appVisibilities).visible;
         arrayAppVisibilities.push(app);
       } else {
-        arrayAppVisibilities.push(mapAppVisibilitiesSource.get(appVisibilities.toString()));
+        arrayAppVisibilities.push(mapAppVisibilitiesTarget.get(appVisibilities));
+      }
+    }
+  
+    for (let appVisibilities of mapAppVisibilitiesSource.keys()) {
+      if (mapAppVisibilitiesTarget.has(appVisibilities) == true) {
+        continue;
+      } else {
+        arrayAppVisibilities.push(mapAppVisibilitiesSource.get(appVisibilities));
       }
     }
   
@@ -423,8 +448,9 @@ export default class MergeFile {
   
    mergeObjectPermissions(mapObjPermTarget: Map<any, any>, mapObjPermSource: Map<any, any>) {
     var arrayObjPermissions = new Array();
-    for (let objtPermission of mapObjPermSource.keys()) {
-      if (mapObjPermTarget.has(objtPermission) == true) {
+    
+    for (let objtPermission of mapObjPermTarget.keys()) {
+      if (mapObjPermSource.has(objtPermission) == true) {
         var objtTarget = mapObjPermTarget.get(objtPermission);
         objtTarget.allowCreate = mapObjPermSource.get(objtPermission).allowCreate;
         objtTarget.allowDelete = mapObjPermSource.get(objtPermission).allowDelete;
@@ -434,7 +460,15 @@ export default class MergeFile {
         objtTarget.viewAllRecords = mapObjPermSource.get(objtPermission).viewAllRecords;
         arrayObjPermissions.push(objtTarget);
       } else {
-        arrayObjPermissions.push(mapObjPermSource.get(objtPermission.toString()));
+        arrayObjPermissions.push(mapObjPermTarget.get(objtPermission));
+      }
+    }
+  
+    for (let objtPermission of mapObjPermSource.keys()) {
+      if (mapObjPermTarget.has(objtPermission) == true) {
+        continue;
+      } else {
+        arrayObjPermissions.push(mapObjPermSource.get(objtPermission));
       }
     }
   

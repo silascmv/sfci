@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Profile xmlns="http://soap.sforce.com/2006/04/metadata">
+    <applicationVisibilities>
+        <application>Teste</application>
+        <default>true</default>
+        <visible>false</visible>
+    </applicationVisibilities>
+    <applicationVisibilities>
+        <application>standard__AllTabSet</application>
+        <default>true</default>
+        <visible>false</visible>
+    </applicationVisibilities>
+    <classAccesses>
+        <apexClass>Teste</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
     <customMetadataTypeAccesses>
         <enabled>false</enabled>
         <name>Integration__mdt</name>
@@ -8,6 +22,30 @@
         <enabled>false</enabled>
         <name>IntegrationTeste__mdt</name>
     </customMetadataTypeAccesses>
+    <customSettingAccesses>
+        <enabled>false</enabled>
+        <name>CustomSettingsTest__c</name>
+    </customSettingAccesses>
+    <customSettingAccesses>
+        <enabled>false</enabled>
+        <name>CustomSettingsTest</name>
+    </customSettingAccesses>
+    <classAccesses>
+        <apexClass>CLasseA</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <customPermissions>
+        <enabled>false</enabled>
+        <name>Teste</name>
+    </customPermissions>
+    <customPermissions>
+        <enabled>false</enabled>
+        <name>DevOps</name>
+    </customPermissions>
+    <customPermissions>
+        <enabled>false</enabled>
+        <name>DevOpsTeste</name>
+    </customPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Opportunity.Testando__c</field>
@@ -28,4 +66,13 @@
         <layout>Asset-Term</layout>
         <recordType>Testando</recordType>
     </layoutAssignments>
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>FeedTeste__c</object>
+        <viewAllRecords>true</viewAllRecords>
+    </objectPermissions>
 </Profile>

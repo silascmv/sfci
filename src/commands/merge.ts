@@ -49,17 +49,24 @@ export default class Merge extends Command {
 
         // MOVE ONLY NEWPROFILES
         if (mapNewProfiles.size > 0) {
+          let lista  =  [ ...mapNewProfiles.keys() ] ;
+          this.log("New Files in Source to move to Target folder: " + JSON.stringify(lista) + "\n");
           for (let key of mapNewProfiles.keys()) {
             fileUtils.moveFilesToTarget(key, flags.source, flags.dir);
           }
         }
-
+        
         // MERGE PERMISSIONS IN SAME FILES
         if (mapToUpdate.size > 0) {
+          let lista  =  [ ...mapToUpdate.keys() ] ;
+          this.log("Files in Source to Merge: " + JSON.stringify(lista) + "\n");
+
           for (let arquivo of mapToUpdate.keys()) {
             this.mergeProfile(arquivo, mapToUpdate.get(arquivo), filesInSource.get(arquivo));
-          }
-        }
+/*             listDeArquivos.push(arquivo);
+ */          }
+/*           this.log("Files to Merge: " + JSON.stringify(listDeArquivos.sort()) + "\n")
+ */        }
         this.log('Finish Merging Profiles \n')
 
         break;
@@ -74,67 +81,78 @@ export default class Merge extends Command {
   mergeProfile(fileName: string, target: any, source: any) {
     var mergeObject = new MergeFile(fileName);
     var targetFile = fileUtils.convertFile(target);
-    var typesMerged = "" ;
+    var typesMerged = new Array();
 
-   
+
     // MAPS - SOURCE
     var mapOfFieldObjSource = mergeObject.mountMapFieldPermission(source);
     var mapUserPermissionSource = mergeObject.mountMapUserPermission(source);
     var mapLayoutAssignmentsSource = mergeObject.mountMapLayoutAssignments(source);
     var mapCustomMdtAccessesSource = mergeObject.mountCustomMetadataTypeAccesses(source);
     var mapCustomPermissionsSource = mergeObject.mountCustomPermissions(source);
-
-    
-    //  Class Accesses MAPS
-    var mapClassAccessesTarget = mergeObject.mountClassAccesses(target);
     var mapClassAccessesSource = mergeObject.mountClassAccesses(source);
-    //  CustomSettingAccesses MAPS
-    var mapCustomSettingsTarget = mergeObject.mountCustomSettingAccesses(target);
     var mapCCustomSettingsSource = mergeObject.mountCustomSettingAccesses(source);
-    //  Application Visibilities MAPS
-    var mapApplicationVisibilitiesTarget = mergeObject.mountApplicationVisibilities(target);
     var mapApplicationVisibilitiesSource = mergeObject.mountApplicationVisibilities(source);
-
-    //  Object Permission MAPS
-    var mapObjectPermissionsTarget = mergeObject.mountObjectPermissions(target);
     var mapObjectPermissionsSource = mergeObject.mountObjectPermissions(source);
+
+
     if (mapOfFieldObjSource.size > 0) {
-      typesMerged += "Field Permissions \n";
+      typesMerged.push("Field Permissions");
       targetFile.Profile.fieldPermissions = mergeObject.mergeFieldPermissions(mergeObject.mountMapFieldPermission(target), mapOfFieldObjSource);
     }
     if (mapUserPermissionSource.size > 0) {
-      typesMerged += "UserPermissions\n";
+      typesMerged.push("UserPermissions");
       targetFile.Profile.userPermissions = mergeObject.mergeUserPermissions(mergeObject.mountMapUserPermission(target), mapUserPermissionSource)
     }
     if (mapLayoutAssignmentsSource.size > 0) {
-      typesMerged += "Layout Assignments\n";
+      typesMerged.push("Layout Assignments");
       targetFile.Profile.layoutAssignments = mergeObject.mergeLayoutAssignments(mergeObject.mountMapLayoutAssignments(target), mapLayoutAssignmentsSource);
     }
     if (mapCustomMdtAccessesSource.size > 0) {
-      typesMerged += "Custom Metadata Type Accesses\n";
+      typesMerged.push("Custom Metadata Type Accesses");
       targetFile.Profile.customMetadataTypeAccesses = mergeObject.mergeCustomMdtAccesses(mergeObject.mountCustomMetadataTypeAccesses(target), mapCustomMdtAccessesSource);
     }
     if (mapCustomPermissionsSource.size > 0) {
-      typesMerged += "Custom Permissions\n";
+      typesMerged.push("Custom Permissions");
       targetFile.Profile.customPermissions = mergeObject.mergeCustomPermissions(mergeObject.mountCustomPermissions(target), mapCustomPermissionsSource);
     }
 
-    this.log("Types Merged : \n \n" + typesMerged);
+    if (mapClassAccessesSource.size > 0) {
+      typesMerged.push("Class Accesses");
+      targetFile.Profile.classAccesses = mergeObject.mergeClassAccesses(mergeObject.mountClassAccesses(target), mapClassAccessesSource);
+    }
+
+    if (mapCCustomSettingsSource.size > 0) {
+      typesMerged.push("Custom Settings");
+      targetFile.Profile.customSettingAccesses = mergeObject.mergeCustomSettings(mergeObject.mountCustomSettingAccesses(target), mapCCustomSettingsSource);
+    }
+
+    if (mapApplicationVisibilitiesSource.size > 0) {
+      typesMerged.push("Application Visibilities");
+      targetFile.Profile.applicationVisibilities = mergeObject.mergeApplicationVisibilities(mergeObject.mountApplicationVisibilities(target), mapApplicationVisibilitiesSource);
+    }
+
+    if (mapObjectPermissionsSource.size > 0) {
+      typesMerged.push("Object Permissions");
+      targetFile.Profile.objectPermissions = mergeObject.mergeObjectPermissions(mergeObject.mountObjectPermissions(target), mapObjectPermissionsSource);
+    }
 
 
-    /*  
-    sourceFile.Profile.customMetadataTypeAccesses = mergeUtils.mergeCustomMdtAccesses(mapCustomMdtAccessesTarget,mapCustomMdtAccessesSource); 
-    sourceFile.Profile.customPermissions = mergeUtils.mergeCustomPermissions(mapCustomPermissionsTarget,mapCustomPermissionsSource); 
-    sourceFile.Profile.classAccesses = mergeUtils.mergeClassAccesses(mapClassAccessesTarget,mapClassAccessesSource); 
-    sourceFile.Profile.customSettingAccesses = mergeUtils.mergeClassAccesses(mapCustomSettingsTarget,mapCCustomSettingsSource); 
-    sourceFile.Profile.applicationVisibilities = mergeUtils.mergeApplicationVisibilities(mapApplicationVisibilitiesTarget,mapApplicationVisibilitiesSource); 
-    sourceFile.Profile.objectPermissions = mergeUtils.mergeObjectPermissions(mapObjectPermissionsTarget,mapObjectPermissionsSource);  */
+    this.log("Types in source " + fileName + " to Merge : \n" + JSON.stringify(typesMerged.sort()) + "\n");
+
+
+
+    //ORDER IN TYPES OF PERMISSIONS
+    targetFile.Profile = Object.keys(targetFile.Profile).sort().reduce(
+      (obj: any, key: any) => {
+        obj[key] = targetFile.Profile[key];
+        return obj;
+      },
+      {}
+    );
+
     fileUtils.writeChanges(targetFile, this.targetFolder, fileName);
 
-  }
-
-  get fileName(){
-    return this.fileMerging;
   }
 
 }
