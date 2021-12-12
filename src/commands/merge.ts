@@ -49,24 +49,22 @@ export default class Merge extends Command {
 
         // MOVE ONLY NEWPROFILES
         if (mapNewProfiles.size > 0) {
-          let lista  =  [ ...mapNewProfiles.keys() ] ;
+          let lista = [...mapNewProfiles.keys()];
           this.log("New Files in Source to move to Target folder: " + JSON.stringify(lista) + "\n");
           for (let key of mapNewProfiles.keys()) {
             fileUtils.moveFilesToTarget(key, flags.source, flags.dir);
           }
         }
-        
+
         // MERGE PERMISSIONS IN SAME FILES
         if (mapToUpdate.size > 0) {
-          let lista  =  [ ...mapToUpdate.keys() ] ;
+          let lista = [...mapToUpdate.keys()];
           this.log("Files in Source to Merge: " + JSON.stringify(lista) + "\n");
 
           for (let arquivo of mapToUpdate.keys()) {
             this.mergeProfile(arquivo, mapToUpdate.get(arquivo), filesInSource.get(arquivo));
-/*             listDeArquivos.push(arquivo);
- */          }
-/*           this.log("Files to Merge: " + JSON.stringify(listDeArquivos.sort()) + "\n")
- */        }
+          }
+        }
         this.log('Finish Merging Profiles \n')
 
         break;
