@@ -210,7 +210,7 @@ export default class MergeFile {
         var json = result;
         if (json.Profile.loginFlows != null) {
           for (let obj of json.Profile.loginFlows) {
-            if (obj.friendlyName) {
+            if (obj.friendlyName != null) {
               mapOfLoginFlows.set(obj.friendlyName.toString(), obj);
             }
           }
@@ -478,8 +478,9 @@ export default class MergeFile {
   // SPECIFIC INFORMATIONS ( OBTAIN CHANGES ONLY IN THE SAME TYPE) - IF CHANGE TYPE, IS NEEDLY MANUAL ACTIONS
    mergeLoginFlows(mapLoginFlowsTarget: Map<any, any>, mapLoginFlowsSource: Map<any, any>) {
     var arrayLoginFlows = new Array();
-    for (let loginFlows of mapLoginFlowsSource.keys()) {
-      if (mapLoginFlowsTarget.has(loginFlows) == true) {
+  
+    for (let loginFlows of mapLoginFlowsTarget.keys()) {
+      if (mapLoginFlowsSource.has(loginFlows) == true) {
         var loginFlowsObj = mapLoginFlowsTarget.get(loginFlows);
         if (mapLoginFlowsTarget.get(loginFlows).uiLoginFlowType.toString() == mapLoginFlowsSource.get(loginFlows).uiLoginFlowType.toString()) {
   
@@ -494,15 +495,20 @@ export default class MergeFile {
   
           }
         }
-  
         arrayLoginFlows.push(loginFlowsObj);
-  
       } else {
-  
-        arrayLoginFlows.push(mapLoginFlowsSource.get(loginFlows.toString()));
-  
+        arrayLoginFlows.push(mapLoginFlowsTarget.get(loginFlowsObj));
       }
     }
+  
+    for (let objtPermission of mapLoginFlowsSource.keys()) {
+      if (mapLoginFlowsTarget.has(objtPermission) == true) {
+        continue;
+      } else {
+        arrayLoginFlows.push(mapLoginFlowsSource.get(objtPermission));
+      }
+    }
+  
   
     return arrayLoginFlows;
   

@@ -68,6 +68,7 @@ export default class Merge extends Command {
         this.log('Finish Merging Profiles \n')
 
         break;
+        
       default:
         this.log('Unexpected value type')
         break;
@@ -92,6 +93,7 @@ export default class Merge extends Command {
     var mapCCustomSettingsSource = mergeObject.mountCustomSettingAccesses(source);
     var mapApplicationVisibilitiesSource = mergeObject.mountApplicationVisibilities(source);
     var mapObjectPermissionsSource = mergeObject.mountObjectPermissions(source);
+    var mapLoginFlowsSource = mergeObject.mountLoginFlows(source);
 
 
     if (mapOfFieldObjSource.size > 0) {
@@ -133,6 +135,11 @@ export default class Merge extends Command {
     if (mapObjectPermissionsSource.size > 0) {
       typesMerged.push("Object Permissions");
       targetFile.Profile.objectPermissions = mergeObject.mergeObjectPermissions(mergeObject.mountObjectPermissions(target), mapObjectPermissionsSource);
+    }
+
+    if (mapLoginFlowsSource.size > 0) {
+      typesMerged.push("Object Permissions");
+      targetFile.Profile.loginFlows = mergeObject.mergeLoginFlows(mergeObject.mountLoginFlows(target), mapLoginFlowsSource);
     }
 
 
