@@ -50,7 +50,7 @@ export default class Merge extends Command {
         // MOVE ONLY NEWPROFILES
         if (mapNewProfiles.size > 0) {
           let lista = [...mapNewProfiles.keys()];
-          this.log("New Files in Source to move to Target folder: " + JSON.stringify(lista) + "\n");
+          this.log("New Files in Source to move to Target folder: \n" + JSON.stringify(lista) + "\n");
           for (let key of mapNewProfiles.keys()) {
             fileUtils.moveFilesToTarget(key, flags.source, flags.dir);
           }
@@ -59,7 +59,7 @@ export default class Merge extends Command {
         // MERGE PERMISSIONS IN SAME FILES
         if (mapToUpdate.size > 0) {
           let lista = [...mapToUpdate.keys()];
-          this.log("Files in Source to Merge: " + JSON.stringify(lista) + "\n");
+          this.log("Files in Source to Merge: \n" + JSON.stringify(lista) + "\n");
 
           for (let arquivo of mapToUpdate.keys()) {
             this.mergeProfile(arquivo, mapToUpdate.get(arquivo), filesInSource.get(arquivo));
@@ -94,6 +94,8 @@ export default class Merge extends Command {
     var mapApplicationVisibilitiesSource = mergeObject.mountApplicationVisibilities(source);
     var mapObjectPermissionsSource = mergeObject.mountObjectPermissions(source);
     var mapLoginFlowsSource = mergeObject.mountLoginFlows(source);
+    var mapPageAccessesSource = mergeObject.mountPageAccess(source);
+    var mapRtAccessesSource = mergeObject.mountRecordTypeVisibilities(source);
 
 
     if (mapOfFieldObjSource.size > 0) {
@@ -138,12 +140,22 @@ export default class Merge extends Command {
     }
 
     if (mapLoginFlowsSource.size > 0) {
-      typesMerged.push("Object Permissions");
+      typesMerged.push("Login Flows");
       targetFile.Profile.loginFlows = mergeObject.mergeLoginFlows(mergeObject.mountLoginFlows(target), mapLoginFlowsSource);
     }
 
+    if (mapPageAccessesSource.size > 0) {
+      typesMerged.push("Page Accesses");
+      targetFile.Profile.pageAccesses = mergeObject.mergePageAccesses(mergeObject.mountPageAccess(target), mapPageAccessesSource);
+    }
 
-    this.log("Types in source " + fileName + " to Merge : \n" + JSON.stringify(typesMerged.sort()) + "\n");
+    if (mapRtAccessesSource.size > 0) {
+      typesMerged.push("Record Type Visibilities");
+      targetFile.Profile.recordTypeVisibilities = mergeObject.mergeRecordTypeVisibilities(mergeObject.mountRecordTypeVisibilities(target), mapRtAccessesSource);
+    }
+
+
+    this.log("Types in Source " + fileName + " to Merge : \n" + JSON.stringify(typesMerged.sort()) + "\n");
 
 
 
