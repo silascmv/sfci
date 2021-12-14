@@ -15,7 +15,7 @@ export default class Merge extends Command {
   fileMerging = '';
 
   static examples = [
-    '$ sfci merge -t profile -s metadata -d src',
+    '$ sfci merge -t force-app/main/default/profile -s src/profiles -d src',
   ]
 
   static teste = [
