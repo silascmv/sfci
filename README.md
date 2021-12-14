@@ -50,7 +50,9 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.9
 
 ## `sfci merge`
 
-Merge your metadata from source path to target org path
+Merge your metadata from source path to target path.
+
+(Only profile in this moment)
 
 ```
 USAGE

@@ -273,6 +273,27 @@ export default class MergeFile {
     return mapRtVisibilities;
   }
 
+  mountTabVisibilities(file: any) {
+    var mapTabVisibilities = new Map();
+    xml2js.parseString(file, (err: Error, result: any) => {
+      if (err) {
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
+        logger.error(erroMessage);
+        throw erroMessage;
+      } else {
+        var json = result;
+        if (json.Profile.tabVisibilities != null) {
+          for (let tab of json.Profile.tabVisibilities) {
+            if (tab.tab != null) {
+              mapTabVisibilities.set(tab.tab.toString(), tab);
+            }
+          }
+        }
+      }
+    });
+    return mapTabVisibilities;
+  }
+
   // MERGE FUNCTIONS
 
   mergeFieldPermissions(mapOfFieldObjTarget: Map<any, any>, mapOfFieldObjSource: Map<any, any>) {
@@ -598,6 +619,30 @@ export default class MergeFile {
     }
 
     return arrayRtVisibilities;
+
+  }
+
+  mergeTabVisibilities(mapTabTarget: Map<any, any>, mapTabSource: Map<any, any>) {
+    var arrayTabVisibilities = [];
+    for (let tab of mapTabTarget.keys()) {
+      if (mapTabSource.has(tab) == true) {
+        var tabTarget = mapTabTarget.get(tab);
+        tabTarget.visibility = mapTabSource.get(tab).visibility;
+        arrayTabVisibilities.push(tabTarget);
+      } else {
+        arrayTabVisibilities.push(mapTabTarget.get(tab));
+      }
+    }
+
+    for (let tab of mapTabSource.keys()) {
+      if (mapTabTarget.has(tab) == true) {
+        continue;
+      } else {
+        arrayTabVisibilities.push(mapTabSource.get(tab));
+      }
+    }
+
+    return arrayTabVisibilities;
 
   }
 }

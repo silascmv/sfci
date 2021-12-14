@@ -18,10 +18,6 @@ export default class Merge extends Command {
     '$ sfci merge -t force-app/main/default/profile -s src/profiles -d src',
   ]
 
-  static teste = [
-    '$ OIE',
-  ]
-
   static flags = {
     help: flags.help({ char: 'h' }),
     source: flags.string({ required: true, char: 's', description: 'Path of source directory with Salesforce' }),
@@ -97,6 +93,7 @@ export default class Merge extends Command {
     let mapLoginFlowsSource = mergeObject.mountLoginFlows(source);
     let mapPageAccessesSource = mergeObject.mountPageAccess(source);
     let mapRtAccessesSource = mergeObject.mountRecordTypeVisibilities(source);
+    let mapTabVisibilities = mergeObject.mountTabVisibilities(source);
     // VERIFICATIONS TO BE MERGE.
     if (mapOfFieldObjSource.size > 0) {
       typesMerged.push('Field Permissions');
@@ -153,6 +150,12 @@ export default class Merge extends Command {
       typesMerged.push('Record Type Visibilities');
       targetFile.Profile.recordTypeVisibilities = mergeObject.mergeRecordTypeVisibilities(mergeObject.mountRecordTypeVisibilities(target), mapRtAccessesSource);
     }
+
+    if (mapTabVisibilities.size > 0) {
+      typesMerged.push('Tabs Visibilities');
+      targetFile.Profile.tabVisibilities = mergeObject.mergeTabVisibilities(mergeObject.mountTabVisibilities(target), mapTabVisibilities);
+    }
+
     this.log('Types in Source ' + fileName + ' to Merge : \n' + JSON.stringify(typesMerged.sort()) + '\n');
     // ORDER IN TYPES OF PERMISSIONS
     targetFile.Profile = Object.keys(targetFile.Profile).sort().reduce(
