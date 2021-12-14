@@ -1,8 +1,12 @@
+/* eslint-disable node/no-unsupported-features/node-builtins */
+/* eslint-disable object-curly-spacing */
+/* eslint-disable prefer-const */
+/* eslint-disable semi */
 import * as xml2js from 'xml2js';
 import * as fs from 'fs';
-const logger = require('./logUtils');
+import logger = require('./log-utils');
 
-//DTO
+// DTO
 class Profile {
   Profile: any;
 }
@@ -16,29 +20,28 @@ export function getFilesInFolders(folder: string) {
   return mapRetorno;
 }
 
-
 export function moveFilesToTarget(fileName: string, source: string, target: string) {
   fs.copyFileSync(process.cwd() + '/' + source + '/' + fileName, process.cwd() + '/' + target + '/' + fileName);
 }
 
 export function writeChanges(sourceFile: any, targetFolder: any, fileName: any) {
-  var builder = new xml2js.Builder({
+  let builder = new xml2js.Builder({
     xmldec: {
       version: '1.0',
       encoding: 'UTF-8',
-      standalone: undefined
+      standalone: undefined,
     }, renderOpts: {
       pretty: true,
       indent: '    ',
-      newline: '\n'
-    }
+      newline: '\n',
+    },
   });
-  var xml = builder.buildObject(sourceFile);
+  let xml = builder.buildObject(sourceFile);
   fs.writeFileSync(targetFolder + '/' + fileName, xml);
 }
 
 export function convertFile(file: any) {
-  var resultado = new Profile();
+  let resultado = new Profile();
   xml2js.parseString(file, (err: Error, result: any) => {
     if (err) {
       logger.error(err.message);
@@ -49,9 +52,4 @@ export function convertFile(file: any) {
   });
 
   return resultado;
-
-}
-
-const isIterable = (value: any) => {
-  return Symbol.iterator in Object(value);
 }
