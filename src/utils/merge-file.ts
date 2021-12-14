@@ -1,19 +1,30 @@
+/* eslint-disable unicorn/filename-case */
+/* eslint-disable eol-last */
+/* eslint-disable no-multiple-empty-lines */
+/* eslint-disable lines-between-class-members */
+/* eslint-disable padded-blocks */
+/* eslint-disable no-var */
+/* eslint-disable eqeqeq */
+/* eslint-disable no-eq-null */
+/* eslint-disable prefer-const */
+/* eslint-disable semi */
+import * as logger from './log-utils';
 import * as xml2js from 'xml2js';
-const logger = require('./logUtils');
 
 
 export default class MergeFile {
-  fileName;
+  fileName: string;
+
   constructor(fileName: string) {
     this.fileName = fileName;
   }
 
   // CREATE MAP FUNCTIONS
   mountMapFieldPermission(file: any) {
-    var mapOfFieldPerm = new Map();
+    let mapOfFieldPerm = new Map();
     xml2js.parseString(file, (err: Error, result: any) => {
       if (err) {
-        let erroMessage = "File --> " + this.fileName + "\n" + err.message
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
         logger.error(erroMessage);
         throw erroMessage;
       } else {
@@ -34,7 +45,7 @@ export default class MergeFile {
     var mapUserPermission = new Map();
     xml2js.parseString(file, (err: Error, result: any) => {
       if (err) {
-        let erroMessage = "File --> " + this.fileName + "\n" + err.message
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
         logger.error(erroMessage);
         throw erroMessage;
       } else {
@@ -55,7 +66,7 @@ export default class MergeFile {
     var mapOfLayoutAssignments = new Map();
     xml2js.parseString(file, (err: Error, result: any) => {
       if (err) {
-        let erroMessage = "File --> " + this.fileName + "\n" + err.message
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
         logger.error(erroMessage);
         throw erroMessage;
       } else {
@@ -76,7 +87,7 @@ export default class MergeFile {
     var mapOfCustomMdtAccess = new Map();
     xml2js.parseString(file, (err: Error, result: any) => {
       if (err) {
-        let erroMessage = "File --> " + this.fileName + "\n" + err.message
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
         logger.error(erroMessage);
         throw erroMessage;
       } else {
@@ -97,7 +108,7 @@ export default class MergeFile {
     var mapOfCustomPermission = new Map();
     xml2js.parseString(file, (err: Error, result: any) => {
       if (err) {
-        let erroMessage = "File --> " + this.fileName + "\n" + err.message
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
         logger.error(erroMessage);
         throw erroMessage;
       } else {
@@ -118,7 +129,7 @@ export default class MergeFile {
     var mapOfClassAccesses = new Map();
     xml2js.parseString(file, (err: Error, result: any) => {
       if (err) {
-        let erroMessage = "File --> " + this.fileName + "\n" + err.message
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
         logger.error(erroMessage);
         throw erroMessage;
       } else {
@@ -139,7 +150,7 @@ export default class MergeFile {
     var mapOfCustomSettings = new Map();
     xml2js.parseString(file, (err: Error, result: any) => {
       if (err) {
-        let erroMessage = "File --> " + this.fileName + "\n" + err.message
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
         logger.error(erroMessage);
         throw erroMessage;
       } else {
@@ -161,7 +172,7 @@ export default class MergeFile {
     var mapOfApplicationVisibilities = new Map();
     xml2js.parseString(file, (err: Error, result: any) => {
       if (err) {
-        let erroMessage = "File --> " + this.fileName + "\n" + err.message
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
         logger.error(erroMessage);
         throw erroMessage;
       } else {
@@ -182,7 +193,7 @@ export default class MergeFile {
     var mapOfObjPermissions = new Map();
     xml2js.parseString(file, (err: Error, result: any) => {
       if (err) {
-        let erroMessage = "File --> " + this.fileName + "\n" + err.message
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
         logger.error(erroMessage);
         throw erroMessage;
       } else {
@@ -203,7 +214,7 @@ export default class MergeFile {
     var mapOfLoginFlows = new Map();
     xml2js.parseString(file, (err: Error, result: any) => {
       if (err) {
-        let erroMessage = "File --> " + this.fileName + "\n" + err.message
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
         logger.error(erroMessage);
         throw erroMessage;
       } else {
@@ -224,7 +235,7 @@ export default class MergeFile {
     var mapPageAccesses = new Map();
     xml2js.parseString(file, (err: Error, result: any) => {
       if (err) {
-        let erroMessage = "File --> " + this.fileName + "\n" + err.message
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
         logger.error(erroMessage);
         throw erroMessage;
       } else {
@@ -245,7 +256,7 @@ export default class MergeFile {
     var mapRtVisibilities = new Map();
     xml2js.parseString(file, (err: Error, result: any) => {
       if (err) {
-        let erroMessage = "File --> " + this.fileName + "\n" + err.message
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
         logger.error(erroMessage);
         throw erroMessage;
       } else {
@@ -265,7 +276,7 @@ export default class MergeFile {
   // MERGE FUNCTIONS
 
   mergeFieldPermissions(mapOfFieldObjTarget: Map<any, any>, mapOfFieldObjSource: Map<any, any>) {
-    var arrayFieldPermission = new Array();
+    var arrayFieldPermission = [];
 
     for (let field of mapOfFieldObjTarget.keys()) {
       if (mapOfFieldObjSource.has(field) == true) {
@@ -290,7 +301,7 @@ export default class MergeFile {
   }
 
   mergeUserPermissions(mapUserPermissionTarget: Map<any, any>, mapUserPermissionSource: Map<any, any>) {
-    var arrayUserPermission = new Array();
+    var arrayUserPermission = [];
     for (let userPermission of mapUserPermissionTarget.keys()) {
       if (mapUserPermissionSource.has(userPermission) == true) {
         var targetUsrPerm = mapUserPermissionTarget.get(userPermission);
@@ -316,7 +327,7 @@ export default class MergeFile {
 
   // SPECIFIC INFORMATIONS ( CASE THE TARGET FILE HAS THE PERMISSION, ONLY VERIFIY IF CHANGE RECORDTYPE)
   mergeLayoutAssignments(mapLayoutAssignmentsTarget: Map<any, any>, mapLayoutAssignmentsSource: Map<any, any>) {
-    var arrayLayoutAssigments = new Array();
+    var arrayLayoutAssigments = [];
     for (let layout of mapLayoutAssignmentsTarget.keys()) {
       if (mapLayoutAssignmentsSource.has(layout) == true) {
         var targetLayoutPerm = mapLayoutAssignmentsTarget.get(layout);
@@ -345,7 +356,7 @@ export default class MergeFile {
   }
 
   mergeCustomMdtAccesses(mapUserPermissionTarget: Map<any, any>, mapUserPermissionSource: Map<any, any>) {
-    var arrayCustomMdtAccesses = new Array();
+    var arrayCustomMdtAccesses = [];
     for (let name of mapUserPermissionTarget.keys()) {
       if (mapUserPermissionSource.has(name) == true) {
         var targetCustomMdt = mapUserPermissionTarget.get(name);
@@ -369,7 +380,7 @@ export default class MergeFile {
   }
 
   mergeCustomPermissions(mapCustomPermissionTarget: Map<any, any>, mapCustomPermissionSource: Map<any, any>) {
-    var arrayCustomPermission = new Array();
+    var arrayCustomPermission = [];
 
     for (let name of mapCustomPermissionTarget.keys()) {
       if (mapCustomPermissionSource.has(name) == true) {
@@ -394,7 +405,7 @@ export default class MergeFile {
   }
 
   mergeClassAccesses(mapClassAccessesTarget: Map<any, any>, mapUserClassAccessesSource: Map<any, any>) {
-    var arrayClassAccesses = new Array();
+    var arrayClassAccesses = [];
     for (let apexClass of mapClassAccessesTarget.keys()) {
       if (mapUserClassAccessesSource.has(apexClass) == true) {
         var targetClassAccesses = mapClassAccessesTarget.get(apexClass);
@@ -418,7 +429,7 @@ export default class MergeFile {
   }
 
   mergeCustomSettings(mapCustomSettingsTarget: Map<any, any>, mapCustomSettingsSource: Map<any, any>) {
-    var arrayCustomSettings = new Array();
+    var arrayCustomSettings = [];
     for (let customSettings of mapCustomSettingsTarget.keys()) {
       if (mapCustomSettingsSource.has(customSettings) == true) {
         var targetCustomSetting = mapCustomSettingsTarget.get(customSettings);
@@ -442,7 +453,7 @@ export default class MergeFile {
   }
 
   mergeApplicationVisibilities(mapAppVisibilitiesTarget: Map<any, any>, mapAppVisibilitiesSource: Map<any, any>) {
-    var arrayAppVisibilities = new Array();
+    var arrayAppVisibilities = [];
 
     for (let appVisibilities of mapAppVisibilitiesTarget.keys()) {
       if (mapAppVisibilitiesSource.has(appVisibilities) == true) {
@@ -468,7 +479,7 @@ export default class MergeFile {
   }
 
   mergeObjectPermissions(mapObjPermTarget: Map<any, any>, mapObjPermSource: Map<any, any>) {
-    var arrayObjPermissions = new Array();
+    var arrayObjPermissions = [];
 
     for (let objtPermission of mapObjPermTarget.keys()) {
       if (mapObjPermSource.has(objtPermission) == true) {
@@ -498,7 +509,7 @@ export default class MergeFile {
   }
   // SPECIFIC INFORMATIONS ( OBTAIN CHANGES ONLY IN THE SAME TYPE) - IF CHANGE TYPE, IS NEEDLY MANUAL ACTIONS
   mergeLoginFlows(mapLoginFlowsTarget: Map<any, any>, mapLoginFlowsSource: Map<any, any>) {
-    var arrayLoginFlows = new Array();
+    var arrayLoginFlows = [];
 
     for (let loginFlows of mapLoginFlowsTarget.keys()) {
       if (mapLoginFlowsSource.has(loginFlows) == true) {
@@ -516,17 +527,17 @@ export default class MergeFile {
 
           }
         }
-        arrayLoginFlows.push(loginFlowsObj);
+        arrayLoginFlows.push(loginFlows);
       } else {
-        arrayLoginFlows.push(mapLoginFlowsTarget.get(loginFlowsObj));
+        arrayLoginFlows.push(mapLoginFlowsTarget.get(loginFlows));
       }
     }
 
-    for (let objtPermission of mapLoginFlowsSource.keys()) {
-      if (mapLoginFlowsTarget.has(objtPermission) == true) {
+    for (let loginFlows of mapLoginFlowsSource.keys()) {
+      if (mapLoginFlowsTarget.has(loginFlows) == true) {
         continue;
       } else {
-        arrayLoginFlows.push(mapLoginFlowsSource.get(objtPermission));
+        arrayLoginFlows.push(mapLoginFlowsSource.get(loginFlows));
       }
     }
 
@@ -536,7 +547,7 @@ export default class MergeFile {
   }
 
   mergePageAccesses(mapPageAccessesTarget: Map<any, any>, mapPageAccessesSource: Map<any, any>) {
-    var arrayPageAccesses = new Array();
+    var arrayPageAccesses = [];
     for (let page of mapPageAccessesTarget.keys()) {
       if (mapPageAccessesSource.has(page) == true) {
         var targetPage = mapPageAccessesTarget.get(page);
@@ -560,7 +571,7 @@ export default class MergeFile {
   }
 
   mergeRecordTypeVisibilities(mapRtTarget: Map<any, any>, mapRtSource: Map<any, any>) {
-    var arrayRtVisibilities = new Array();
+    var arrayRtVisibilities = [];
     for (let rt of mapRtTarget.keys()) {
       if (mapRtSource.has(rt) == true) {
         var targetRt = mapRtTarget.get(rt);

@@ -19,7 +19,7 @@ $ npm install -g sfci
 $ sfci COMMAND
 running command...
 $ sfci (-v|--version|version)
-sfci/0.0.1 linux-x64 node-v17.1.0
+sfci/0.0.2 linux-x64 node-v17.1.0
 $ sfci --help [COMMAND]
 USAGE
   $ sfci COMMAND
@@ -28,28 +28,8 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`sfci hello [FILE]`](#sfci-hello-file)
 * [`sfci help [COMMAND]`](#sfci-help-command)
-
-## `sfci hello [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ sfci hello [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-
-EXAMPLE
-  $ sfci hello
-  hello world from ./src/hello.ts!
-```
-
-_See code: [src/commands/hello.ts](https://github.com/silascmv/sfci/blob/v0.0.1/src/commands/hello.ts)_
+* [`sfci merge`](#sfci-merge)
 
 ## `sfci help [COMMAND]`
 
@@ -67,4 +47,24 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.9/src/commands/help.ts)_
+
+## `sfci merge`
+
+Merge your metadata from source path to target org path
+
+```
+USAGE
+  $ sfci merge
+
+OPTIONS
+  -d, --dir=dir        (required) Path of source directory with Salesforce
+  -h, --help           show CLI help
+  -s, --source=source  (required) Path of source directory with Salesforce
+  -t, --type=profile   (required) Type of Metadata(Only profile in this moment
+
+EXAMPLE
+  $ sfci merge -t profile -s metadata -d src
+```
+
+_See code: [src/commands/merge.ts](https://github.com/silascmv/sfci/blob/v0.0.2/src/commands/merge.ts)_
 <!-- commandsstop -->
