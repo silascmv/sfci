@@ -19,7 +19,7 @@ $ npm install -g sfci
 $ sfci COMMAND
 running command...
 $ sfci (-v|--version|version)
-sfci/0.0.2 linux-x64 node-v17.1.0
+sfci/0.0.3 linux-x64 node-v17.1.0
 $ sfci --help [COMMAND]
 USAGE
   $ sfci COMMAND
@@ -66,5 +66,5 @@ EXAMPLE
   $ sfci merge -t profile -s metadata -d src
 ```
 
-_See code: [src/commands/merge.ts](https://github.com/silascmv/sfci/blob/v0.0.2/src/commands/merge.ts)_
+_See code: [src/commands/merge.ts](https://github.com/silascmv/sfci/blob/v0.0.3/src/commands/merge.ts)_
 <!-- commandsstop -->
