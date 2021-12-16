@@ -19,7 +19,7 @@ $ npm install -g sfci
 $ sfci COMMAND
 running command...
 $ sfci (-v|--version|version)
-sfci/0.0.3 linux-x64 node-v17.1.0
+sfci/0.0.4 linux-x64 node-v17.1.0
 $ sfci --help [COMMAND]
 USAGE
   $ sfci COMMAND
@@ -50,9 +50,7 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.9
 
 ## `sfci merge`
 
-Merge your metadata from source path to target path.
-
-(Only profile in this moment)
+Merge your metadata from source path to target org path(Only Profiles in this moment).
 
 ```
 USAGE
@@ -62,11 +60,11 @@ OPTIONS
   -d, --dir=dir        (required) Path of source directory with Salesforce
   -h, --help           show CLI help
   -s, --source=source  (required) Path of source directory with Salesforce
-  -t, --type=profile   (required) Type of Metadata(Only profile in this moment)
+  -t, --type=profile   (required) Type of Metadata(Only profile in this moment
 
 EXAMPLE
-  $ sfci merge -t profile -s metadata -d src
+  $ sfci merge -t force-app/main/default/profile -s src/profiles -d src
 ```
 
-_See code: [src/commands/merge.ts](https://github.com/silascmv/sfci/blob/v0.0.3/src/commands/merge.ts)_
+_See code: [src/commands/merge.ts](https://github.com/silascmv/sfci/blob/v0.0.4/src/commands/merge.ts)_
 <!-- commandsstop -->
