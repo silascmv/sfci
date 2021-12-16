@@ -17,6 +17,13 @@
         <enabled>false</enabled>
         <name>CustomSettingsTest__c</name>
     </customSettingAccesses>
+    <externalDataSourceAccesses>
+        <enabled>false</enabled>
+        <externalDataSource>Database</externalDataSource>
+    </externalDataSourceAccesses>
+    <flowAccesses>
+        <enabled>true</enabled>
+        <flow>FlowXpto</flow>
     <fieldPermissions>
         <editable>true</editable>
         <field>Opportunity.Testando__c</field>

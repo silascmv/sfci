@@ -8,7 +8,7 @@ import * as fileUtils from '../utils/file-utils'
 import MergeFile from '../utils/merge-file'
 
 export default class Merge extends Command {
-  static description = 'Merge your metadata from source path to target org path'
+  static description = 'Merge your metadata from source path to target org path(Only Profiles in this moment).'
 
   targetFolder = '';
 
@@ -94,6 +94,8 @@ export default class Merge extends Command {
     let mapPageAccessesSource = mergeObject.mountPageAccess(source);
     let mapRtAccessesSource = mergeObject.mountRecordTypeVisibilities(source);
     let mapTabVisibilities = mergeObject.mountTabVisibilities(source);
+    let mapFlowAccessesSource = mergeObject.mountFlowAccesses(source);
+    let mapEDAccessesSource = mergeObject.mountExternalDataSourceAccesses(source);
     // VERIFICATIONS TO BE MERGE.
     if (mapOfFieldObjSource.size > 0) {
       typesMerged.push('Field Permissions');
@@ -154,6 +156,16 @@ export default class Merge extends Command {
     if (mapTabVisibilities.size > 0) {
       typesMerged.push('Tabs Visibilities');
       targetFile.Profile.tabVisibilities = mergeObject.mergeTabVisibilities(mergeObject.mountTabVisibilities(target), mapTabVisibilities);
+    }
+
+    if (mapFlowAccessesSource.size > 0) {
+      typesMerged.push('Flow Accesses');
+      targetFile.Profile.flowAccesses = mergeObject.mergeFlowAccesses(mergeObject.mountFlowAccesses(target), mapFlowAccessesSource);
+    }
+
+    if (mapEDAccessesSource.size > 0) {
+      typesMerged.push('External Data Accesses');
+      targetFile.Profile.externalDataSourceAccesses = mergeObject.mergeExternalDataAccesses(mergeObject.mountExternalDataSourceAccesses(target), mapEDAccessesSource);
     }
 
     this.log('Types in Source ' + fileName + ' to Merge : \n' + JSON.stringify(typesMerged.sort()) + '\n');

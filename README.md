@@ -62,7 +62,7 @@ OPTIONS
   -d, --dir=dir        (required) Path of source directory with Salesforce
   -h, --help           show CLI help
   -s, --source=source  (required) Path of source directory with Salesforce
-  -t, --type=profile   (required) Type of Metadata(Only profile in this moment
+  -t, --type=profile   (required) Type of Metadata(Only profile in this moment)
 
 EXAMPLE
   $ sfci merge -t profile -s metadata -d src
