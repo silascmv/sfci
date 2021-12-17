@@ -15,7 +15,7 @@ export default class Merge extends Command {
   fileMerging = '';
 
   static examples = [
-    '$ sfci merge -t force-app/main/default/profile -s src/profiles -d src',
+    '$ sfci merge -t profile -s force-app/main/default/profile -d src/profiles',
   ]
 
   static flags = {
@@ -26,7 +26,7 @@ export default class Merge extends Command {
   }
 
   async run() {
-    this.log('SFCI - Merge \n')
+    this.log('SFCI\n')
 
     const { flags } = this.parse(Merge);
     this.targetFolder = flags.dir;

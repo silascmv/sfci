@@ -63,7 +63,7 @@ OPTIONS
   -t, --type=profile   (required) Type of Metadata(Only profile in this moment
 
 EXAMPLE
-  $ sfci merge -t force-app/main/default/profile -s src/profiles -d src
+  $ sfci merge -t profile -s force-app/main/default/profile -d src/profiles
 ```
 
 _See code: [src/commands/merge.ts](https://github.com/silascmv/sfci/blob/v0.0.4/src/commands/merge.ts)_

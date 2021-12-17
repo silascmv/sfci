@@ -21,14 +21,15 @@
         <enabled>false</enabled>
         <externalDataSource>Database</externalDataSource>
     </externalDataSourceAccesses>
-    <flowAccesses>
-        <enabled>true</enabled>
-        <flow>FlowXpto</flow>
     <fieldPermissions>
         <editable>true</editable>
         <field>Opportunity.Testando__c</field>
         <readable>true</readable>
     </fieldPermissions>
+    <flowAccesses>
+        <enabled>true</enabled>
+        <flow>FlowXpto</flow>
+    </flowAccesses>
     <layoutAssignments>
         <layout>Asset-Term</layout>
         <recordType>Testando</recordType>
