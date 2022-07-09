@@ -22,7 +22,7 @@ export default class Merge extends Command {
     help: flags.help({ char: 'h' }),
     source: flags.string({ required: true, char: 's', description: 'Path of source directory with Salesforce' }),
     dir: flags.string({ required: true, char: 'd', description: 'Path of source directory with Salesforce' }),
-    type: flags.string({ required: true, char: 't', description: 'Type of Metadata(Only profile in this moment', options: ['profile'] }),
+    type: flags.string({ required: true, char: 't', description: 'Type of Metadata(Only profile in this moment)', options: ['profile'] }),
   }
 
   async run() {
@@ -38,7 +38,7 @@ export default class Merge extends Command {
         const filesInTarget = fileUtils.getFilesInFolders(flags.dir);
         let mapToUpdate = new Map();
         let mapNewProfiles = new Map();
-
+        // MAP FILES TO UPDATE.
         for (let file of filesInSource.keys()) {
           if (filesInTarget.has(file)) {
             mapToUpdate.set(file, filesInTarget.get(file));
@@ -170,6 +170,7 @@ export default class Merge extends Command {
 
     this.log('Types in Source ' + fileName + ' to Merge : \n' + JSON.stringify(typesMerged.sort()) + '\n');
     // ORDER IN TYPES OF PERMISSIONS
+    this.log(typeof targetFile.Profile)
     targetFile.Profile = Object.keys(targetFile.Profile).sort().reduce(
       (obj: any, key: any) => {
         obj[key] = targetFile.Profile[key];
