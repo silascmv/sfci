@@ -1,3 +1,5 @@
+/* eslint-disable keyword-spacing */
+/* eslint-disable space-before-blocks */
 /* eslint-disable unicorn/filename-case */
 /* eslint-disable eol-last */
 /* eslint-disable no-multiple-empty-lines */
@@ -8,6 +10,7 @@
 /* eslint-disable no-eq-null */
 /* eslint-disable prefer-const */
 /* eslint-disable semi */
+/* eslint-disable @typescript-eslint/no-array-constructor */
 import * as logger from './log-utils';
 import * as xml2js from 'xml2js';
 
@@ -271,6 +274,69 @@ export default class MergeFile {
       }
     });
     return mapRtVisibilities;
+  }
+
+  mountTabVisibilities(file: any) {
+    var mapTabVisibilities = new Map();
+    xml2js.parseString(file, (err: Error, result: any) => {
+      if (err) {
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
+        logger.error(erroMessage);
+        throw erroMessage;
+      } else {
+        var json = result;
+        if (json.Profile.tabVisibilities != null) {
+          for (let tab of json.Profile.tabVisibilities) {
+            if (tab.tab != null) {
+              mapTabVisibilities.set(tab.tab.toString(), tab);
+            }
+          }
+        }
+      }
+    });
+    return mapTabVisibilities;
+  }
+
+  mountFlowAccesses(file: any) {
+    var flowAccesses = new Map();
+    xml2js.parseString(file, (err: Error, result: any) => {
+      if (err) {
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
+        logger.error(erroMessage);
+        throw erroMessage;
+      } else {
+        var json = result;
+        if (json.Profile.flowAccesses != null) {
+          for (let flow of json.Profile.flowAccesses) {
+            if (flow.flow != null) {
+              flowAccesses.set(flow.flow.toString(), flow);
+            }
+          }
+        }
+      }
+    });
+    return flowAccesses;
+  }
+
+  mountExternalDataSourceAccesses(file: any) {
+    var mapEDAccesses = new Map();
+    xml2js.parseString(file, (err: Error, result: any) => {
+      if (err) {
+        let erroMessage = 'File --> ' + this.fileName + '\n' + err.message
+        logger.error(erroMessage);
+        throw erroMessage;
+      } else {
+        var json = result;
+        if (json.Profile.externalDataSourceAccesses != null) {
+          for (let ed of json.Profile.externalDataSourceAccesses) {
+            if (ed.externalDataSource != null) {
+              mapEDAccesses.set(ed.externalDataSource.toString(), ed);
+            }
+          }
+        }
+      }
+    });
+    return mapEDAccesses;
   }
 
   // MERGE FUNCTIONS
@@ -598,6 +664,78 @@ export default class MergeFile {
     }
 
     return arrayRtVisibilities;
+
+  }
+
+  mergeTabVisibilities(mapTabTarget: Map<any, any>, mapTabSource: Map<any, any>) {
+    var arrayTabVisibilities = [];
+    for (let tab of mapTabTarget.keys()) {
+      if (mapTabSource.has(tab) == true) {
+        var tabTarget = mapTabTarget.get(tab);
+        tabTarget.visibility = mapTabSource.get(tab).visibility;
+        arrayTabVisibilities.push(tabTarget);
+      } else {
+        arrayTabVisibilities.push(mapTabTarget.get(tab));
+      }
+    }
+
+    for (let tab of mapTabSource.keys()) {
+      if (mapTabTarget.has(tab) == true) {
+        continue;
+      } else {
+        arrayTabVisibilities.push(mapTabSource.get(tab));
+      }
+    }
+
+    return arrayTabVisibilities;
+
+  }
+
+  mergeFlowAccesses(mapFlowTarget: Map<any, any>, mapFlowSource: Map<any, any>) {
+    var arrayFlowAccess = [];
+    for (let flow of mapFlowTarget.keys()) {
+      if (mapFlowSource.has(flow) == true) {
+        var flowTarget = mapFlowTarget.get(flow);
+        flowTarget.enabled = mapFlowSource.get(flow).enabled;
+        arrayFlowAccess.push(flowTarget);
+      } else {
+        arrayFlowAccess.push(mapFlowTarget.get(flow));
+      }
+    }
+
+    for (let flow of mapFlowSource.keys()) {
+      if (mapFlowTarget.has(flow) == true) {
+        continue;
+      } else {
+        arrayFlowAccess.push(mapFlowSource.get(flow));
+      }
+    }
+
+    return arrayFlowAccess;
+
+  }
+
+  mergeExternalDataAccesses(mapEDTarget: Map<any, any>, mapEDSource: Map<any, any>) {
+    var arrayEDAccesses = [];
+    for (let EDaccess of mapEDTarget.keys()) {
+      if (mapEDSource.has(EDaccess) == true) {
+        var ed = mapEDTarget.get(EDaccess);
+        ed.enabled = mapEDSource.get(EDaccess).enabled;
+        arrayEDAccesses.push(ed);
+      } else {
+        arrayEDAccesses.push(mapEDTarget.get(EDaccess));
+      }
+    }
+
+    for (let EDaccess of mapEDSource.keys()) {
+      if (mapEDTarget.has(EDaccess) == true) {
+        continue;
+      } else {
+        arrayEDAccesses.push(mapEDSource.get(EDaccess));
+      }
+    }
+
+    return arrayEDAccesses;
 
   }
 }

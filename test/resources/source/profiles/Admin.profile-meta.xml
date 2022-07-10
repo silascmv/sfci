@@ -7,7 +7,7 @@
     </applicationVisibilities>
     <classAccesses>
         <apexClass>Teste</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <customMetadataTypeAccesses>
         <enabled>false</enabled>
@@ -17,11 +17,24 @@
         <enabled>false</enabled>
         <name>CustomSettingsTest__c</name>
     </customSettingAccesses>
+    <externalDataSourceAccesses>
+        <enabled>false</enabled>
+        <externalDataSource>Database</externalDataSource>
+    </externalDataSourceAccesses>
     <fieldPermissions>
         <editable>true</editable>
         <field>Opportunity.Testando__c</field>
         <readable>true</readable>
     </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Opportunity.Bola__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <flowAccesses>
+        <enabled>true</enabled>
+        <flow>FlowXpto</flow>
+    </flowAccesses>
     <layoutAssignments>
         <layout>Asset-Term</layout>
         <recordType>Testando</recordType>
