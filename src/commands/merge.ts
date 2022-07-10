@@ -170,7 +170,6 @@ export default class Merge extends Command {
 
     this.log('Types in Source ' + fileName + ' to Merge : \n' + JSON.stringify(typesMerged.sort()) + '\n');
     // ORDER IN TYPES OF PERMISSIONS
-    this.log(typeof targetFile.Profile)
     targetFile.Profile = Object.keys(targetFile.Profile).sort().reduce(
       (obj: any, key: any) => {
         obj[key] = targetFile.Profile[key];
