@@ -40,6 +40,22 @@ export function writeChanges(sourceFile: any, targetFolder: any, fileName: any) 
   fs.writeFileSync(targetFolder + '/' + fileName, xml);
 }
 
+export function writeChangesOneFile(sourceFile: any, folder: any) {
+  let builder = new xml2js.Builder({
+    xmldec: {
+      version: '1.0',
+      encoding: 'UTF-8',
+      standalone: undefined,
+    }, renderOpts: {
+      pretty: true,
+      indent: '    ',
+      newline: '\n',
+    },
+  });
+  let xml = builder.buildObject(sourceFile);
+  fs.writeFileSync(folder + '-sorted', xml);
+}
+
 export function convertFile(file: any) {
   let resultado = new Profile();
   xml2js.parseString(file, (err: Error, result: any) => {
@@ -52,4 +68,8 @@ export function convertFile(file: any) {
   });
 
   return resultado;
+}
+
+export function readFile(path: any) {
+  return fs.readFileSync(path, { encoding: 'utf8', flag: 'r' })
 }
