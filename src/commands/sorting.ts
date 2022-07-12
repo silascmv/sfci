@@ -59,22 +59,58 @@ export default class Sorting extends Command {
       {}
     )
     // CALL FUNCTIONS TO SORT ELEMENTS BY TYPE OF METADATA
-    this.utilsObj.sortTag(file.Profile.fieldPermissions, 'field')
-    this.utilsObj.sortTag(file.Profile.applicationVisibilities, 'application')
-    this.utilsObj.sortTag(file.Profile.objectPermissions, 'object')
-    this.utilsObj.sortTag(file.Profile.layoutAssignments, 'layout')
-    this.utilsObj.sortTag(file.Profile.userPermissions, 'name')
-    this.utilsObj.sortTag(file.Profile.customMetadataTypeAccesses, 'name')
-    this.utilsObj.sortTag(file.Profile.customPermissions, 'name')
-    this.utilsObj.sortTag(file.Profile.classAccesses, 'apexClass')
-    this.utilsObj.sortTag(file.Profile.customSettingAccesses, 'name')
-    this.utilsObj.sortTag(file.Profile.customSettingAccesses, 'name')
-    this.utilsObj.sortTag(file.Profile.loginFlows, 'friendlyName')
-    this.utilsObj.sortTag(file.Profile.pageAccesses, 'apexPage')
-    this.utilsObj.sortTag(file.Profile.recordTypeVisibilities, 'recordType')
-    this.utilsObj.sortTag(file.Profile.tabVisibilities, 'tab')
-    this.utilsObj.sortTag(file.Profile.flowAccesses, 'flow')
-    this.utilsObj.sortTag(file.Profile.externalDataSourceAccesses, 'externalDataSource')
+    if (file.Profile.fieldPermissions !== undefined) {
+      this.utilsObj.sortTag(file.Profile.fieldPermissions, 'field')
+    }
+    if (file.Profile.applicationVisibilities !== undefined) {
+      this.utilsObj.sortTag(file.Profile.applicationVisibilities, 'application')
+    }
+    if (file.Profile.objectPermissions !== undefined) {
+      this.utilsObj.sortTag(file.Profile.objectPermissions, 'object')
+    }
+    if (file.Profile.layoutAssignments !== undefined) {
+      this.utilsObj.sortTag(file.Profile.layoutAssignments, 'layout')
+    }
+    if (file.Profile.userPermissions !== undefined) {
+      this.utilsObj.sortTag(file.Profile.userPermissions, 'name')
+    }
+
+    if (file.Profile.customMetadataTypeAccesses !== undefined) {
+      this.utilsObj.sortTag(file.Profile.customMetadataTypeAccesses, 'name')
+    }
+    if (file.Profile.customPermissions !== undefined) {
+      this.utilsObj.sortTag(file.Profile.customPermissions, 'name')
+    }
+    this.log('CHEGOU AQ')
+
+    if (file.Profile.classAccesses !== undefined) {
+      this.utilsObj.sortTag(file.Profile.classAccesses, 'apexClass')
+    }
+    if (file.Profile.customSettingAccesses !== undefined) {
+      this.utilsObj.sortTag(file.Profile.customSettingAccesses, 'name')
+    }
+    if (file.Profile.loginFlows !== undefined) {
+      this.utilsObj.sortTag(file.Profile.loginFlows, 'friendlyName')
+    }
+    if (file.Profile.pageAccesses !== undefined) {
+      this.utilsObj.sortTag(file.Profile.pageAccesses, 'apexPage')
+    }
+    if (file.Profile.recordTypeVisibilities !== undefined) {
+      this.utilsObj.sortTag(file.Profile.recordTypeVisibilities, 'recordType')
+    }
+    if (file.Profile.recordTypeVisibilities !== undefined) {
+      this.utilsObj.sortTag(file.Profile.recordTypeVisibilities, 'recordType')
+    }
+    if (file.Profile.tabVisibilities !== undefined) {
+      this.utilsObj.sortTag(file.Profile.tabVisibilities, 'tab')
+    }
+    if (file.Profile.flowAccesses !== undefined) {
+      this.utilsObj.sortTag(file.Profile.flowAccesses, 'flow')
+    }
+
+    if (file.Profile.externalDataSourceAccesses !== undefined) {
+      this.utilsObj.sortTag(file.Profile.externalDataSourceAccesses, 'externalDataSource')
+    }
 
     fileUtils.writeChangesOneFile(file, this.path)
   }

@@ -18,6 +18,23 @@ export default class SortUtils {
   /* constructor(fileName: string) {
       this.fileName = fileName
     } */
+  mapOfMetadataKeys = [{
+    fieldPermissions: 'field',
+    userPermissions: 'name',
+    layoutAssignments: 'layout',
+    customMetadataTypeAccesses: 'name',
+    customPermissions: 'name',
+    classAccesses: 'apexClass',
+    customSettingAccesses: 'name',
+    applicationVisibilities: 'application',
+    objectPermissions: 'object',
+    loginFlows: 'friendlyName',
+    pageAccesses: 'apexPage',
+    recordTypeVisibilities: 'recordType',
+    externalDataSourceAccesses: 'externalDataSource',
+    flowAccesses: 'flow',
+
+  }]
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   sortTag(obj: any, fieldCondition: any): any {
@@ -30,5 +47,9 @@ export default class SortUtils {
     return obj.sort((a: any, b: any) => {
       return (a[fieldCondition] > b[fieldCondition]) ? 1 : ((b[fieldCondition] > a[fieldCondition]) ? -1 : 0);
     })
+  }
+
+  sortListTags(){
+    this.log(new Map(this.mapOfMetadataKeys))
   }
 }
